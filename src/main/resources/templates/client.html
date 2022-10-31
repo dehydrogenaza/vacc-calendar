@@ -1,0 +1,55 @@
+<form class="container-fluid">
+    <div class="border rounded-4 p-4 bg-light">
+
+        <section class="row mt-3">
+            <h4 class="display-4 mb-3">1. Wprowadź datę...</h4>
+            <div class="col-md-6">
+                <label for="inputDateOfBirth" class="form-label">...urodzenia</label>
+                <input type="date" class="form-control" id="inputDateOfBirth" html:bidir-value="form.dateOfBirth">
+                <html:text value="form.dateOfBirth"/>
+            </div>
+            <div class="col-md-6">
+                <label for="inputDateOfFirstVaccination" class="form-label">...rozpoczęcia szczepień</label>
+                <input type="date" class="form-control" id="inputDateOfFirstVaccination"
+                       html:bidir-value="form.dateOfFirstVaccination" html:enabled="not form.dateOfBirth.equals('')">
+                <html:text value="form.dateOfFirstVaccination"/>
+            </div>
+        </section>
+
+        <section class="row mt-5">
+            <h4 class="display-4 mb-3">2. Co wszczyknąć xD</h4>
+            <std:foreach var="vaccineName" in="vaccines">
+                <div class="form-check form-switch col-md-6 col-xl-4 pt-3">
+                    <input class="form-check-input" type="checkbox" role="switch" attr:id="'flexSwitch' + vaccineName"
+                           html:checked="form.isVaccineSelected(vaccineName)"
+                           html:checked-change="form.changeVaccineSelection(vaccineName, it)">
+                    <label class="form-check-label" attr:for="'flexSwitch' + vaccineName"><html:text value="vaccineName"/></label>
+                    <html:text value="form.isVaccineSelected(vaccineName)"/>
+                </div>
+            </std:foreach>
+        </section>
+
+    </div>
+
+    <div class="p-4">
+        <section class="row mt-3">
+            <h4 class="display-4 mb-3">3. Kalendarz</h4>
+            <div class="form-check form-switch col-md-6 col-xl-4 p-2">
+                <label for="dateOfVaccination1" class="form-label">Example 1</label>
+                <input type="date" class="form-control bg-info bg-opacity-25" id="dateOfVaccination1">
+            </div>
+            <div class="form-check form-switch col-md-6 col-xl-4 p-2">
+                <label for="dateOfVaccination2" class="form-label">Example 2</label>
+                <input type="date" class="form-control bg-info bg-opacity-25" id="dateOfVaccination2">
+            </div>
+            <div class="form-check form-switch col-md-6 col-xl-4 p-2">
+                <label for="dateOfVaccination3" class="form-label">Example 3</label>
+                <input type="date" class="form-control bg-info bg-opacity-25" id="dateOfVaccination3">
+            </div>
+            <div class="form-check form-switch col-md-6 col-xl-4 p-2">
+                <label for="dateOfVaccination4" class="form-label">Example 4</label>
+                <input type="date" class="form-control bg-info bg-opacity-25" id="dateOfVaccination4">
+            </div>
+        </section>
+    </div>
+</form>
