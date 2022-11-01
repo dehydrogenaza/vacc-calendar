@@ -1,34 +1,29 @@
 package org.dehydrogenaza.data;
 
-import java.util.HashMap;
-import java.util.Set;
+
+import org.dehydrogenaza.view.DisplayState;
+
+import java.util.List;
 
 public class Form {
     private final DataSource source;
 
-    private final HashMap<String, Boolean> vaccines = new HashMap<>();
+    private final List<Vaccine> vaccines;
     private String dateOfBirth = "";
     private String dateOfFirstVaccination = "";
+    private boolean licenseAccepted = false;
+
+    private String formLog = "form";
 
 
     public Form(DataSource source) {
         this.source = source;
 
-        for (String vaccine : source.getVaccines()) {
-            vaccines.put(vaccine, Math.random() > 0.5);
-        }
+        this.vaccines = source.getVaccines();
     }
 
-    public boolean isVaccineSelected(String name) {
-        return vaccines.get(name);
-    }
-
-    public void changeVaccineSelection(String name, boolean newSelectionStatus) {
-        vaccines.replace(name, newSelectionStatus);
-    }
-
-    public Set<String> getVaccines() {
-        return vaccines.keySet();
+    public List<Vaccine> getVaccines() {
+        return vaccines;
     }
 
     public String getDateOfBirth() {
@@ -48,4 +43,49 @@ public class Form {
         this.dateOfFirstVaccination = dateOfFirstVaccination;
     }
 
+    public boolean getLicenseAccepted() {
+        return licenseAccepted;
+    }
+
+    public void setLicenseAccepted(boolean licenseAccepted) {
+        this.licenseAccepted = licenseAccepted;
+    }
+
+    public String getFormLog() {
+        return formLog;
+    }
+
+    public DisplayState submit() {
+        if (!licenseAccepted) return DisplayState.BAD_SUBMIT;
+
+        if (dateOfBirth.isEmpty() || dateOfFirstVaccination.isEmpty()) return DisplayState.BAD_SUBMIT;
+
+        if (!validateDates()) return DisplayState.BAD_SUBMIT;
+
+        return DisplayState.CALENDAR;
+    }
+
+    private boolean validateDates() {
+        try {
+            //YYYY-MM-DD
+            int startYear = Integer.parseInt(dateOfFirstVaccination.substring(0, 4));
+            int startMonth = Integer.parseInt(dateOfFirstVaccination.substring(5, 7));
+            int startDay = Integer.parseInt(dateOfFirstVaccination.substring(8, 10));
+            int birthYear = Integer.parseInt(dateOfBirth.substring(0, 4));
+            int birthMonth = Integer.parseInt(dateOfBirth.substring(5, 7));
+            int birthDay = Integer.parseInt(dateOfBirth.substring(8, 10));
+
+            formLog = startYear + "/" + startMonth + "/" + startDay + " --- " + birthYear + "/" + birthMonth + "/" + birthDay;
+
+            if (startYear > birthYear) return true;
+            if (startYear < birthYear) return false;
+
+            if (startMonth > birthMonth) return true;
+            if (startMonth < birthMonth) return false;
+
+            return startDay >= birthDay;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
