@@ -68,22 +68,14 @@ public class Form {
     private boolean validateDates() {
         try {
             //YYYY-MM-DD
-            int startYear = Integer.parseInt(dateOfFirstVaccination.substring(0, 4));
-            int startMonth = Integer.parseInt(dateOfFirstVaccination.substring(5, 7));
-            int startDay = Integer.parseInt(dateOfFirstVaccination.substring(8, 10));
-            int birthYear = Integer.parseInt(dateOfBirth.substring(0, 4));
-            int birthMonth = Integer.parseInt(dateOfBirth.substring(5, 7));
-            int birthDay = Integer.parseInt(dateOfBirth.substring(8, 10));
+            int parsedFirstVaccination = Integer.parseInt(dateOfFirstVaccination.substring(0, 4)
+                    + dateOfFirstVaccination.substring(5, 7)
+                    + dateOfFirstVaccination.substring(8, 10));
+            int parsedBirth = Integer.parseInt(dateOfBirth.substring(0, 4)
+                    + dateOfBirth.substring(5, 7)
+                    + dateOfBirth.substring(8, 10));
 
-            formLog = startYear + "/" + startMonth + "/" + startDay + " --- " + birthYear + "/" + birthMonth + "/" + birthDay;
-
-            if (startYear > birthYear) return true;
-            if (startYear < birthYear) return false;
-
-            if (startMonth > birthMonth) return true;
-            if (startMonth < birthMonth) return false;
-
-            return startDay >= birthDay;
+            return parsedFirstVaccination >= parsedBirth;
         } catch (Exception e) {
             return false;
         }

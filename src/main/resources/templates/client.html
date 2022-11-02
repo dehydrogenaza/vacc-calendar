@@ -50,41 +50,25 @@
 
 <div attr:class="displayState == DisplayState.CALENDAR ? 'container-fluid pt-3' : 'd-none'">
     <div class="border rounded-4 p-4 bg-light">
-        <section class="row container-fluid g-0 justify-content-center">
+        <section class="container-fluid g-0 justify-content-center">
             <h4 class="display-6 mb-3">3. Kalendarz</h4>
-            <div class="col-xxl-10">
-                <table class="table align-middle table-hover">
-                    <thead>
-                    <tr>
-                        <th class="col-2">Data</th>
-                        <th>Szczepionki</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <std:foreach var="date" in="getCalendarDates()">
-                        <tr>
-                            <td><input type="date" class="form-control"
-                                       attr:id="'cal' + date.date"
-                                       attr:aria-label="'cal' + date.date"
-                                       attr:value="date.date"></td>
-                            <td>
+            <div class="d-flex flex-wrap gap-2">
+                <std:foreach var="date" in="calendarDates">
+                    <div class="col">
+                        <div class="card h-100" style="min-width: 12rem;">
+                            <div class="card-header">
+                                <html:text value="date.date"/>
+                                <small class="text-muted align-top">Obowiązkowe</small>
+                            </div>
+                            <div class="card-body">
                                 <std:foreach var="vaccine" in="date.vaccines">
-                                    <div class="dropup d-inline-block">
-                                        <button class="btn btn-outline-primary dropdown-toggle m-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <html:text value="vaccine.name"/>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="#">Zmień termin</a></li>
-                                            <li><a class="dropdown-item" href="#">Usuń</a></li>
-                                            <li><a class="dropdown-item" href="#">Cośtam cośtam</a></li>
-                                        </ul>
-                                    </div>
+                                    <p class="card-text"><html:text value="vaccine.name"/></p>
                                 </std:foreach>
-                            </td>
-                        </tr>
-                    </std:foreach>
-                    </tbody>
-                </table>
+                            </div>
+                            <a href="#" class="btn card-footer text-center">Zmień</a>
+                        </div>
+                    </div>
+                </std:foreach>
             </div>
         </section>
     </div>
