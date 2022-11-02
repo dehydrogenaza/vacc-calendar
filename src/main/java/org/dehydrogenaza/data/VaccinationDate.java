@@ -18,4 +18,8 @@ public class VaccinationDate {
     public List<Vaccine> getVaccines() {
         return vaccines;
     }
+
+    public void addVaccine(Vaccine vaccine) {
+        vaccines.add(vaccine);
+    }
 }

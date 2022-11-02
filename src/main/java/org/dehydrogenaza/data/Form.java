@@ -55,6 +55,10 @@ public class Form {
         return formLog;
     }
 
+    public void setFormLog(String formLog) {
+        this.formLog = formLog;
+    }
+
     public DisplayState submit() {
         if (!licenseAccepted) return DisplayState.BAD_SUBMIT;
 

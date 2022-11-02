@@ -52,6 +52,7 @@
     <div class="border rounded-4 p-4 bg-light">
         <section class="container-fluid g-0 justify-content-center">
             <h4 class="display-6 mb-3">3. Kalendarz</h4>
+
             <div class="d-flex flex-wrap gap-2">
                 <std:foreach var="date" in="calendarDates">
                     <div class="col">
@@ -70,6 +71,7 @@
                     </div>
                 </std:foreach>
             </div>
+
         </section>
     </div>
 </div>
@@ -78,3 +80,10 @@
     <html:text value="'MAIN LOGGER: ' + testLogger"/><br>
     <html:text value="'FORM LOGGER: ' + form.formLog"/><br>
     <html:text value="'current state: ' + displayState"/><br>
+
+<button class="btn btn-dark" type="button"
+        event:click="addDate()">+Data</button>
+<button class="btn btn-dark" type="button"
+        event:click="addVaccine(3)">+Szczepionka</button>
+<button class="btn btn-dark" type="button"
+        event:click="submit()">+Resubmit</button>
