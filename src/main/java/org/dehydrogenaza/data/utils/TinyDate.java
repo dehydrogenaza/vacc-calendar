@@ -5,6 +5,7 @@ public class TinyDate {
     private final int year;
     private final int month;
     private final int day;
+
     private enum Month {
         INVALID(0),
         JANUARY(31),
@@ -23,8 +24,8 @@ public class TinyDate {
         Month(final int daysIn) {
             this.daysInMonth = daysIn;
         }
-        private final int daysInMonth;
 
+        private final int daysInMonth;
         private int daysIn(boolean isLeapYear) {
             if (this == FEBRUARY && isLeapYear) {
                 return daysInMonth + 1;
@@ -32,8 +33,11 @@ public class TinyDate {
             return daysInMonth;
         }
 
-    }
+        private int daysLeft(int currentDay, boolean leapYear) {
+            return this.daysIn(leapYear) - currentDay;
+        }
 
+    }
     private final static Month[] monthsByValue = Month.values();
 
     public TinyDate(String date) {
@@ -54,12 +58,7 @@ public class TinyDate {
         int m = month;
         int d = day;
 
-        //leap year = divisible by 4
-        //except NOT a leap year if also divisible by 100
-        //UNLESS also divisible by 400
-        //for example: 2000 is a leap year, 1900 is not
-        boolean isLeapYear = (y % 4 == 0) && ((y % 100 != 0) || (y % 400 == 0));
-        int daysLeft = monthsByValue[m].daysIn(isLeapYear) - d;
+        int daysLeft = monthsByValue[m].daysLeft(d, isLeapYear(y));
 
         while (offset > daysLeft) {
             offset -= daysLeft;
@@ -68,34 +67,39 @@ public class TinyDate {
             if (m == 12) {
                 m = 1;
                 y++;
-                isLeapYear = y % 4 == 0;
             } else {
                 m++;
             }
 
-            daysLeft = monthsByValue[m].daysIn(isLeapYear) - d;
+            daysLeft = monthsByValue[m].daysLeft(d, isLeapYear(y));
         }
         d += offset;
 
         return new TinyDate(y, m, d);
     }
 
+    public int asNumber() {
+        return year * 10000 + month * 100 + day;
+    }
+
     @Override
     public String toString() {
-        String fixedMonth;
-        if (month < 10) {
-            fixedMonth = "0" + month;
-        } else {
-            fixedMonth = "" + month;
-        }
-
-        String fixedDay;
-        if (day < 10) {
-            fixedDay = "0" + day;
-        } else {
-            fixedDay = "" + day;
-        }
         //this wouldn't work for Mieszko I
-        return year + "-" + fixedMonth + "-" + fixedDay;
+        return year + "-" + fixLength(month) + "-" + fixLength(day);
+    }
+
+    private boolean isLeapYear(int year) {
+        //leap year = divisible by 4
+        //except NOT a leap year if also divisible by 100
+        //UNLESS also divisible by 400
+        //for example: 2000 is a leap year, 1900 is not
+        return (year % 4 == 0) && ((year % 400 == 0) || (year % 100 != 0));
+    }
+
+    private String fixLength(int dateFragment) {
+        if (dateFragment < 10) {
+            return "0" + dateFragment;
+        }
+        return "" + dateFragment;
     }
 }

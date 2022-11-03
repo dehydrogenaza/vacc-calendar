@@ -14,16 +14,20 @@ public class VaccinationCalendar {
 
     private final List<VaccinationDate> calendarDates = new ArrayList<>();
 
+    @SuppressWarnings("ComparatorCombinators")
     public VaccinationCalendar(Form form) {
         this.form = form;
         this.vaccines = form.getVaccines();
 
         buildCalendarDates();
+        calendarDates.sort((d1, d2)
+                -> d1.getDateAsNumber() - d2.getDateAsNumber());
+
 
     }
 
     private void buildCalendarDates() {
-        Map<String, List<Vaccine>> dateMap = new HashMap<>();
+        Map<String, List<Vaccine>> mapOfAllVaccinationsOnGivenDates = new HashMap<>();
 
         TinyDate startDate = new TinyDate(form.getDateOfFirstVaccination());
 
@@ -31,20 +35,24 @@ public class VaccinationCalendar {
             if (!vaccine.isSelected()) {
                 continue;
             }
-            for (int offset : vaccine.getDateOffsets()) {
-                String offsetDate = startDate.offset(offset).toString();
-                if (dateMap.containsKey(offsetDate)) {
-                    List<Vaccine> vaccinesAtDate = dateMap.get(offsetDate);
-                    vaccinesAtDate.add(vaccine);
+            for (int offsetInDays : vaccine.getDateOffsets()) {
+                String dateOfVaccination = startDate.offset(offsetInDays).toString();
+
+                if (mapOfAllVaccinationsOnGivenDates.containsKey(dateOfVaccination)) {
+                    List<Vaccine> vaccinationsOnThisDate = mapOfAllVaccinationsOnGivenDates.get(dateOfVaccination);
+                    vaccinationsOnThisDate.add(vaccine);
+
                 } else {
                     List<Vaccine> firstVaccineAtDate = new ArrayList<>();
                     firstVaccineAtDate.add(vaccine);
-                    dateMap.put(offsetDate, firstVaccineAtDate);
+                    mapOfAllVaccinationsOnGivenDates.put(dateOfVaccination, firstVaccineAtDate);
+
                 }
             }
         }
 
-        dateMap.forEach((date, vaccineList) -> calendarDates.add(new VaccinationDate(date, vaccineList)));
+        mapOfAllVaccinationsOnGivenDates.forEach(
+                (date, vaccinesAtDate) -> calendarDates.add(new VaccinationDate(date, vaccinesAtDate)));
     }
 
     public List<VaccinationDate> get() {

@@ -1,18 +1,27 @@
 package org.dehydrogenaza.data;
 
+import org.dehydrogenaza.data.utils.TinyDate;
+
 import java.util.List;
 
 public class VaccinationDate {
-    private final String date;
+    private final String dateISO;
+    private final TinyDate dateInternal;
     private final List<Vaccine> vaccines;
 
-    public VaccinationDate(String date, List<Vaccine> vaccines) {
-        this.date = date;
+    public VaccinationDate(String dateISO, List<Vaccine> vaccines) {
+        this.dateISO = dateISO;
         this.vaccines = vaccines;
+
+        dateInternal = new TinyDate(dateISO);
     }
 
     public String getDate() {
-        return date;
+        return dateISO;
+    }
+
+    public int getDateAsNumber() {
+        return dateInternal.asNumber();
     }
 
     public List<Vaccine> getVaccines() {
