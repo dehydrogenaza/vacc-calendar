@@ -6,12 +6,17 @@
             <h4 class="display-6 mb-3">1. Wprowadź datę...</h4>
             <div class="col-md-6 px-2 g-0">
                 <label for="inputDateOfBirth" class="form-label">...urodzenia</label>
-                <input type="date" class="form-control" id="inputDateOfBirth" html:bidir-value="form.dateOfBirth">
+                <input type="date" id="inputDateOfBirth"
+                       attr:class="'form-control' + (form.dateOfBirthMissing ? ' is-invalid' : '')"
+                       html:bidir-value="form.dateOfBirth"
+                       min="1900-01-01">
             </div>
             <div class="col-md-6 px-2 g-0">
                 <label for="inputDateOfFirstVaccination" class="form-label">...rozpoczęcia szczepień</label>
-                <input type="date" class="form-control" id="inputDateOfFirstVaccination"
-                       html:bidir-value="form.dateOfFirstVaccination" html:enabled="not form.dateOfBirth.equals('')">
+                <input type="date" id="inputDateOfFirstVaccination"
+                       attr:class="'form-control' + ((form.dateOfFirstVaccinationMissing || form.dateOfFirstVaccinationTooEarly) ? ' is-invalid' : '')"
+                       html:bidir-value="form.dateOfFirstVaccination" html:enabled="not form.dateOfBirth.equals('')"
+                       attr:min="form.dateOfBirth">
             </div>
         </section>
 
@@ -33,7 +38,7 @@
     <div attr:class="displayState == DisplayState.CALENDAR ? 'd-none' : 'row container-fluid justify-content-center p-3'">
         <div class="border rounded-4 p-4 bg-light col-sm-6">
             <div class="row g-0 justify-content-center">
-                <button class="btn btn-primary btn-lg col-xl-4" type="button"
+                <button class="btn btn-primary btn-lg col-xl-4" type="submit"
                     event:click="submit()">Wygeneruj kalendarz</button>
                 <div class="form-check col-10 pt-3 align-items-center">
                     <input attr:class="'form-check-input' + ((form.licenseAccepted or (displayState != DisplayState.BAD_SUBMIT)) ? '' : ' is-invalid')" type="checkbox" value="" id="licenseCheck"

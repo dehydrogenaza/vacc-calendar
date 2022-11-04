@@ -43,6 +43,10 @@ public class Form {
      */
     private boolean licenseAccepted = false;
 
+    private boolean dateOfBirthMissing = false;
+    private boolean dateOfFirstVaccinationMissing = false;
+    private boolean dateOfFirstVaccinationTooEarly = false;
+
 
 //  TODO: Remove test utility
     /**
@@ -73,7 +77,10 @@ public class Form {
 
     public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
-        this.dateOfFirstVaccination = dateOfBirth;
+
+        dateOfBirthMissing = dateOfBirth.isEmpty();
+
+        setDateOfFirstVaccination(dateOfBirth);
     }
 
     public String getDateOfFirstVaccination() {
@@ -82,6 +89,9 @@ public class Form {
 
     public void setDateOfFirstVaccination(String dateOfFirstVaccination) {
         this.dateOfFirstVaccination = dateOfFirstVaccination;
+
+        dateOfFirstVaccinationMissing = dateOfBirth.isEmpty();
+        validateDates();
     }
 
     public boolean getLicenseAccepted() {
@@ -92,7 +102,19 @@ public class Form {
         this.licenseAccepted = licenseAccepted;
     }
 
-//  TODO: Remove test utility
+    public boolean isDateOfBirthMissing() {
+        return dateOfBirthMissing;
+    }
+
+    public boolean isDateOfFirstVaccinationMissing() {
+        return dateOfFirstVaccinationMissing;
+    }
+
+    public boolean isDateOfFirstVaccinationTooEarly() {
+        return dateOfFirstVaccinationTooEarly;
+    }
+
+    //  TODO: Remove test utility
     public String getFormLog() {
         return formLog;
     }
@@ -116,7 +138,10 @@ public class Form {
     public DisplayState submit() {
         if (!licenseAccepted) return DisplayState.BAD_SUBMIT;
 
-        if (dateOfBirth.isEmpty() || dateOfFirstVaccination.isEmpty()) return DisplayState.BAD_SUBMIT;
+        dateOfBirthMissing = dateOfBirth.isEmpty();
+        dateOfFirstVaccinationMissing = dateOfFirstVaccination.isEmpty();
+
+        if (dateOfBirthMissing || dateOfFirstVaccinationMissing) return DisplayState.BAD_SUBMIT;
 
         if (!validateDates()) return DisplayState.BAD_SUBMIT;
 
@@ -134,6 +159,7 @@ public class Form {
      */
     private boolean validateDates() {
         try {
+            //TODO: Use TinyDate instead, possibly allows us to get rid of Integer usage
             //YYYY-MM-DD
             int parsedFirstVaccination = Integer.parseInt(dateOfFirstVaccination.substring(0, 4)
                     + dateOfFirstVaccination.substring(5, 7)
@@ -142,7 +168,8 @@ public class Form {
                     + dateOfBirth.substring(5, 7)
                     + dateOfBirth.substring(8, 10));
 
-            return parsedFirstVaccination >= parsedBirth;
+            dateOfFirstVaccinationTooEarly = parsedFirstVaccination < parsedBirth;
+            return !dateOfFirstVaccinationTooEarly;
         } catch (Exception e) {
             return false;
         }
