@@ -10,6 +10,9 @@
                        attr:class="'form-control' + (form.dateOfBirthMissing ? ' is-invalid' : '')"
                        html:bidir-value="form.dateOfBirth"
                        min="1900-01-01">
+                <div id="inputDateOfBirthFeedback" class="invalid-feedback">
+                    <html:text value="form.dateOfBirthMissing ? 'Nienarodzonych nie szczepimy.' : ''"/>
+                </div>
             </div>
             <div class="col-md-6 px-2 g-0">
                 <label for="inputDateOfFirstVaccination" class="form-label">...rozpoczęcia szczepień</label>
@@ -17,6 +20,10 @@
                        attr:class="'form-control' + ((form.dateOfFirstVaccinationMissing || form.dateOfFirstVaccinationTooEarly) ? ' is-invalid' : '')"
                        html:bidir-value="form.dateOfFirstVaccination" html:enabled="not form.dateOfBirth.equals('')"
                        attr:min="form.dateOfBirth">
+                <div id="inputDateOfFirstVaccinationFeedback" class="invalid-feedback">
+                    <html:text value="form.dateOfFirstVaccinationMissing ? 'Wbijaj datę pierwszego zastrzyka' : ''"/>
+                    <html:text value="((not form.dateOfFirstVaccinationMissing) and form.dateOfFirstVaccinationTooEarly) ? 'W brzuchu matki będziesz kłuł?' : ''"/>
+                </div>
             </div>
         </section>
 
@@ -58,24 +65,62 @@
         <section class="container-fluid g-0 justify-content-center">
             <h4 class="display-6 mb-3">3. Kalendarz</h4>
 
-            <div class="d-flex flex-wrap gap-2">
+            <table class="table align-middle table-hover">
+                <thead>
+                <tr class="d-none d-sm-table-row">
+                    <th class="col-2">Data</th>
+                    <th>Szczepionki</th>
+                </tr>
+                </thead>
+
+                <tbody>
                 <std:foreach var="date" in="calendarDates">
-                    <div class="col">
-                        <div class="card h-100" style="min-width: 12rem;">
-                            <div class="card-header">
-                                <html:text value="date.date"/>
-                                <small class="text-muted align-top">Obowiązkowe</small>
-                            </div>
-                            <div class="card-body">
-                                <std:foreach var="vaccine" in="date.vaccines">
-                                    <p class="card-text"><html:text value="vaccine.name"/></p>
-                                </std:foreach>
-                            </div>
-                            <a href="#" class="btn card-footer text-center" event:click="changeDate(date)">Zmień</a>
-                        </div>
-                    </div>
+                    <tr>
+                        <td class="d-none d-sm-table-cell">
+                            <input type="date" class="form-control" html:value="date.date"
+                                   attr:id="'bigSchedule' + date.getDate()" aria-label="'schedule' + date.getDate()">
+                        </td>
+                        <td>
+                            <input type="date" class="form-control d-sm-none" attr:id="'smallSchedule' + date.getDate()" aria-label="'schedule' + date.getDate()">
+                            <std:foreach var="vaccine" in="date.vaccines">
+                                <div class="dropup d-inline-block">
+                                    <button class="btn btn-outline-primary dropdown-toggle m-1 text-wrap" type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false" style="max-width: 18rem;">
+                                        <html:text value="vaccine.name"/>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-item" id="test" onclick="event.stopPropagation()">
+                                            <small class="text-muted align-top">Zmień termin</small>
+                                            <input type="date" class="form-control" html:change="changeDate(date)">
+                                        </li>
+                                        <li><a class="dropdown-item" href="#">Usuń (tylko tę dawkę)</a></li>
+                                        <li><a class="dropdown-item" href="#">Usuń <span class="text-danger">(wszystkie dawki)</span></a></li>
+                                    </ul>
+                                </div>
+                            </std:foreach>
+                        </td>
+                    </tr>
                 </std:foreach>
-            </div>
+                </tbody>
+            </table>
+<!--            <div class="d-flex flex-wrap gap-2">-->
+<!--                <std:foreach var="date" in="calendarDates">-->
+<!--                    <div class="col">-->
+<!--                        <div class="card h-100" style="min-width: 12rem;">-->
+<!--                            <div class="card-header">-->
+<!--                                <html:text value="date.date"/>-->
+<!--                                <small class="text-muted align-top">Obowiązkowe</small>-->
+<!--                            </div>-->
+<!--                            <div class="card-body">-->
+<!--                                <std:foreach var="vaccine" in="date.vaccines">-->
+<!--                                    <p class="card-text"><html:text value="vaccine.name"/></p>-->
+<!--                                </std:foreach>-->
+<!--                            </div>-->
+<!--                            <a href="#" class="btn card-footer text-center" event:click="changeDate(date)">Zmień</a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </std:foreach>-->
+<!--            </div>-->
 
         </section>
     </div>

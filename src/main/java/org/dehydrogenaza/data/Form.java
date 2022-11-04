@@ -91,7 +91,9 @@ public class Form {
         this.dateOfFirstVaccination = dateOfFirstVaccination;
 
         dateOfFirstVaccinationMissing = dateOfBirth.isEmpty();
-        validateDates();
+        if (!dateOfFirstVaccinationMissing) {
+            validateDates();
+        }
     }
 
     public boolean getLicenseAccepted() {
@@ -161,12 +163,17 @@ public class Form {
         try {
             //TODO: Use TinyDate instead, possibly allows us to get rid of Integer usage
             //YYYY-MM-DD
-            int parsedFirstVaccination = Integer.parseInt(dateOfFirstVaccination.substring(0, 4)
-                    + dateOfFirstVaccination.substring(5, 7)
-                    + dateOfFirstVaccination.substring(8, 10));
             int parsedBirth = Integer.parseInt(dateOfBirth.substring(0, 4)
                     + dateOfBirth.substring(5, 7)
                     + dateOfBirth.substring(8, 10));
+            if (parsedBirth < 19000101) {
+                dateOfBirthMissing = true;
+                return false;
+            }
+
+            int parsedFirstVaccination = Integer.parseInt(dateOfFirstVaccination.substring(0, 4)
+                    + dateOfFirstVaccination.substring(5, 7)
+                    + dateOfFirstVaccination.substring(8, 10));
 
             dateOfFirstVaccinationTooEarly = parsedFirstVaccination < parsedBirth;
             return !dateOfFirstVaccinationTooEarly;
