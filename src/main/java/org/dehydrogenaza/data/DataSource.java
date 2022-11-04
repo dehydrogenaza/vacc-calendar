@@ -3,8 +3,22 @@ package org.dehydrogenaza.data;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Mock implementation of the initial data provider. Creates and serves fake data, such as vaccine names, number of
+ * vaccinations etc.
+ * <p>Proper implementation will probably read the data from a JSON file.</p>
+ */
 public class DataSource {
 
+
+    /**
+     * Gets the list of all potential {@link Vaccine}s. <strong>The list is mutable.</strong> It's used for
+     * displaying the vaccine selection, the results (suggested vaccination dates), as well as tracking the selection
+     * toggle.
+     * @return
+     *          all supported vaccines.
+     */
     public List<Vaccine> getVaccines() {
         List<Vaccine> vaccines = new ArrayList<>();
         int[] offset1 = {0, 5, 10, 15};
