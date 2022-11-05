@@ -77,8 +77,10 @@
                 <std:foreach var="date" in="calendarDates">
                     <tr>
                         <td class="d-none d-sm-table-cell">
-                            <input type="date" class="form-control" html:value="date.date"
+                            <input type="date" class="form-control" html:bidir-value="date.tempDate"
                                    attr:id="'bigSchedule' + date.getDate()" aria-label="'schedule' + date.getDate()">
+                            <button attr:class="'btn btn-dark btn-sm mt-3' + (date.date.equals(date.tempDate) ? ' d-none' : '')" type="button"
+                                    event:click="confirmCalendarChange(date)">Potwierdź</button>
                         </td>
                         <td>
                             <input type="date" class="form-control d-sm-none" attr:id="'smallSchedule' + date.getDate()" aria-label="'schedule' + date.getDate()">

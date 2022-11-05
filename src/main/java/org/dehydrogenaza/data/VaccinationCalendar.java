@@ -55,6 +55,10 @@ public class VaccinationCalendar {
         this.vaccines = null;
     }
 
+    public void removeDate(VaccinationDate date) {
+        calendarDates.remove(date);
+    }
+
 
 //    TODO: Redo the whole thing.
     /**
@@ -70,6 +74,34 @@ public class VaccinationCalendar {
         calendarDates.replaceAll(date
                 -> date.getDateAsNumber() == oldDate.getDateAsNumber() ? newDate : date);
         sortByDate();
+
+    }
+
+    public void updateDate(VaccinationDate changedDate) {
+        if (changedDate.getTempDate().isEmpty()) {
+            removeDate(changedDate);
+        } else {
+            //TODO: validation?
+            changedDate.update();
+
+            calendarDates.forEach(d -> {
+                if (d.equals(changedDate)) {
+                    return;
+                }
+                if (d.getDate().equals(changedDate.getDate())) {
+                    for (Vaccine vaccine : changedDate.getVaccines()) {
+                        d.addVaccine(vaccine);
+                    }
+                    changedDate.flaggedForRemoval = true;
+                }
+            });
+
+            if (changedDate.flaggedForRemoval) {
+                removeDate(changedDate);
+            }
+
+            sortByDate();
+        }
     }
 
 

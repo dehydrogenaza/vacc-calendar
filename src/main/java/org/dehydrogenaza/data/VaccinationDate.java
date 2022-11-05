@@ -14,17 +14,21 @@ public class VaccinationDate {
     /**
      * Date as a YYYY-MM-DD <code>String</code>, which is the format used by web browsers for input fields.
      */
-    private final String dateISO;
+    private String dateISO;
+
+    private String tempDate;
 
     /**
      * For convenience, the same date as a {@link TinyDate}.
      */
-    private final TinyDate dateInternal;
+    private TinyDate dateInternal;
 
     /**
      * Vaccines scheduled for this date.
      */
     private final List<Vaccine> vaccinesScheduled;
+
+    public boolean flaggedForRemoval = false;
 
 
     /**
@@ -38,6 +42,7 @@ public class VaccinationDate {
     public VaccinationDate(String dateISO, List<Vaccine> vaccines) {
         this.dateISO = dateISO;
         this.vaccinesScheduled = vaccines;
+        this.tempDate = dateISO;
 
         dateInternal = new TinyDate(dateISO);
     }
@@ -51,6 +56,12 @@ public class VaccinationDate {
         return dateISO;
     }
 
+    public void update() {
+        dateISO = tempDate;
+
+        dateInternal = new TinyDate(dateISO);
+    }
+
     /**
      * Returns the date in its numeric representation, YYYYMMDD, where the first four digits represent the year and
      * so on.
@@ -59,6 +70,15 @@ public class VaccinationDate {
      */
     public int getDateAsNumber() {
         return dateInternal.asNumber();
+    }
+
+    public String getTempDate() {
+        return tempDate;
+    }
+
+
+    public void setTempDate(String tempDate) {
+        this.tempDate = tempDate;
     }
 
     /**

@@ -103,19 +103,26 @@ public class Client extends ApplicationTemplate {
         return calendarDates.get();
     }
 
+    public void confirmCalendarChange(VaccinationDate date) {
+        if (date.getDate().equals(date.getTempDate())) {
+            return;
+        }
+        calendarDates.updateDate(date);
+    }
+
 
 //    TODO: Create an actual implementation
     /**
      * <strong>MOCK IMPLEMENTATION</strong>
      * <p>Replaces a {@link VaccinationDate} with a new one (which should be probably passed as parameter, but
      * currently isn't). This <strong>mutates</strong> the contents of {@link #calendarDates}.</p>
-     * @param   oldDate
+     * @param   date
      *          The date to be replaced (representing a unique calendar date and every vaccination scheduled for that
      *          date).
      */
-    public void changeDate(VaccinationDate oldDate) {
-        calendarDates.changeDate(oldDate);
-        testLogger="Invoked from: " + oldDate;
+    public void changeDate(VaccinationDate date) {
+        calendarDates.changeDate(date);
+        testLogger = "Invoked from: " + date;
     }
 
 
