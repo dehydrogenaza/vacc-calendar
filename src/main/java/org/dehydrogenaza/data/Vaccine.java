@@ -1,6 +1,6 @@
 package org.dehydrogenaza.data;
 
-
+//TODO: Split this into "vaccine data/builder" and "vaccine instance/dose (with calendar date etc.)" classes
 /**
  * A <strong>Vaccine</strong> represents all the data associated with a single type of vaccination, such as the name
  * of the product, its numeric identifier, number of doses and the recommended delay between doses.

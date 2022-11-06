@@ -99,4 +99,13 @@ public class VaccinationDate {
     public void addVaccine(Vaccine vaccine) {
         vaccinesScheduled.add(vaccine);
     }
+
+    public boolean isSetToNew() {
+        //TODO: Add full validation
+        return !dateISO.equals(tempDate) && !tempDate.isEmpty();
+    }
+
+    public boolean isSetToRemove() {
+        return tempDate.isEmpty();
+    }
 }

@@ -40,7 +40,6 @@ public class VaccinationCalendar {
         this.vaccines = form.getVaccines();
 
         buildCalendarDates();
-
         sortByDate();
 
     }
@@ -78,16 +77,20 @@ public class VaccinationCalendar {
     }
 
     public void updateDate(VaccinationDate changedDate) {
+        //empty input = remove from calendar completely
         if (changedDate.getTempDate().isEmpty()) {
             removeDate(changedDate);
         } else {
             //TODO: validation?
+            //submit temp (input) values
             changedDate.update();
 
             calendarDates.forEach(d -> {
+                //don't do anything for the "changedDate" object itself
                 if (d.equals(changedDate)) {
                     return;
                 }
+                //if *another* VaccinationDate has the same actual "date", merge their content
                 if (d.getDate().equals(changedDate.getDate())) {
                     for (Vaccine vaccine : changedDate.getVaccines()) {
                         d.addVaccine(vaccine);
@@ -96,6 +99,7 @@ public class VaccinationCalendar {
                 }
             });
 
+            //if "changedDate"'s content was merged into another date, remove it
             if (changedDate.flaggedForRemoval) {
                 removeDate(changedDate);
             }
