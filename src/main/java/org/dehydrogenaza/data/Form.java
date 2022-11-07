@@ -43,8 +43,22 @@ public class Form {
      */
     private boolean licenseAccepted = false;
 
+    /**
+     * <code>true</code> if the user submits a value and then removes it. Used in input validation. Read by an HTML
+     * element, to control its visibility.
+     */
     private boolean dateOfBirthMissing = false;
+
+    /**
+     * <code>true</code> if the user submits a value and then removes it. Used in input validation. Read by an HTML
+     * element, to control its visibility.
+     */
     private boolean dateOfFirstVaccinationMissing = false;
+
+    /**
+     * <code>true</code> if the user submits a date of 1st vaccination that's before the child's birthdate. Used in
+     * input validation. Read by an HTML element, to control its visibility.
+     */
     private boolean dateOfFirstVaccinationTooEarly = false;
 
 

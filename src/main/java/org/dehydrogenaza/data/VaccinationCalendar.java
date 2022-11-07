@@ -41,7 +41,6 @@ public class VaccinationCalendar {
 
         buildCalendarDates();
         sortByDate();
-
     }
 
 
@@ -54,6 +53,12 @@ public class VaccinationCalendar {
         this.vaccines = null;
     }
 
+
+    /**
+     * Fully removes a {@link VaccinationDate} (with every dose scheduled during that day) from this calendar.
+     * @param   date
+     *          {@link VaccinationDate} object to be removed, usually supplied by Flavour from an HTML input field.
+     */
     public void removeDate(VaccinationDate date) {
         calendarDates.remove(date);
     }
@@ -76,15 +81,26 @@ public class VaccinationCalendar {
 
     }
 
+
+    /**
+     * Updates the calendar by either removing a given {@link VaccinationDate} instance (if its calendar date was set
+     * to ""), or by rescheduling it to a new day (temporarily stored in its <code>tempDate</code> field). If the new
+     * calendar date already has some doses scheduled, the two VaccinationDate objects are conflated in place of the
+     * existing (older) object, and the changedDate is removed from the calendar.
+     * @param   changedDate
+     *          a {@link VaccinationDate} object which has its internal <code>tempDate</code> field changed and is
+     *          contained in this {@link VaccinationCalendar}.
+     */
     public void updateDate(VaccinationDate changedDate) {
         //empty input = remove from calendar completely
         if (changedDate.getTempDate().isEmpty()) {
             removeDate(changedDate);
         } else {
             //TODO: validation?
-            //submit temp (input) values
+            //submit temp (input) value
             changedDate.update();
 
+            //TODO: Turn into a normal loop, flaggedForRemoval here instead of as a field
             calendarDates.forEach(d -> {
                 //don't do anything for the "changedDate" object itself
                 if (d.equals(changedDate)) {
@@ -131,6 +147,7 @@ public class VaccinationCalendar {
 
         TinyDate startDate = new TinyDate(form.getDateOfFirstVaccination());
 
+        //TODO: Some of this should probably be moved to Vaccine
         for (Vaccine vaccine : vaccines) {
             if (!vaccine.isSelected()) {
                 //skip if this vaccine is not selected
@@ -158,7 +175,7 @@ public class VaccinationCalendar {
             }
         }
 
-//      TODO: This could be a separate method
+//      TODO: This could be a separate method (maybe, could be overthinking)
         //translate each key-value pair of our HashMap to a VaccinationDate instance
         //add them all to .calendarDates
         mapOfAllVaccinationsOnGivenDates.forEach(

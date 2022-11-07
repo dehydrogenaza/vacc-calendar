@@ -16,6 +16,12 @@ public class VaccinationDate {
      */
     private String dateISO;
 
+    /**
+     * Internal YYYY-MM-DD date field, which is <strong>bidirectionally bound to an HTML input field</strong> for
+     * changing this VaccinationDate's date. After changes are confirmed by the user, if <code>tempDate</code> is
+     * empty, this object is removed from the calendar. Otherwise, its {@link #dateISO} and {@link #dateInternal}
+     * fields are updated to reflect the <code>tempDate</code>.
+     */
     private String tempDate;
 
     /**
@@ -28,6 +34,10 @@ public class VaccinationDate {
      */
     private final List<Vaccine> vaccinesScheduled;
 
+    /**
+     * Whether this object is marked for removal from {@link VaccinationCalendar}s. <strong>Probably a
+     * temporary solution.</strong>
+     */
     public boolean flaggedForRemoval = false;
 
 
@@ -41,8 +51,9 @@ public class VaccinationDate {
      */
     public VaccinationDate(String dateISO, List<Vaccine> vaccines) {
         this.dateISO = dateISO;
-        this.vaccinesScheduled = vaccines;
         this.tempDate = dateISO;
+        //TODO: Defensive copying? think if this should be immutable
+        this.vaccinesScheduled = vaccines;
 
         dateInternal = new TinyDate(dateISO);
     }
@@ -100,11 +111,27 @@ public class VaccinationDate {
         vaccinesScheduled.add(vaccine);
     }
 
+
+    /**
+     * Checks if the user entered a new <strong>nonempty, valid (<-- NOT YET IMPLEMENTED)</strong> date for this
+     * VaccinationDate.
+     * @return
+     *          <code>true</code> if the internal <code>tempDate</code> (bound to an HTML input field) is different
+     *          from the actual date field and isn't empty; <code>false</code> otherwise.
+     */
     public boolean isSetToNew() {
         //TODO: Add full validation
         return !dateISO.equals(tempDate) && !tempDate.isEmpty();
     }
 
+
+    /**
+     * Checks if the user marked this VaccinationDate for removal, which is equivalent with entering nothing ("") in
+     * its input field.
+     * @return
+     *          <code>true</code> if the internal <code>tempDate</code> (bound to an HTML input field) is empty;
+     *          <code>false</code> otherwise.
+     */
     public boolean isSetToRemove() {
         return tempDate.isEmpty();
     }

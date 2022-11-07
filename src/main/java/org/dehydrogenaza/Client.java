@@ -90,6 +90,12 @@ public class Client extends ApplicationTemplate {
         return displayState;
     }
 
+
+    /**
+     * Finalizes initial user input in the main {@link Form}, queries its validity, and sets the application's state
+     * accordingly. If everything is OK, the state should become {@link DisplayState#CALENDAR} and the
+     * {@link #calendarDates} field will be set to a new {@link VaccinationCalendar} instance.
+     */
     public void submit() {
         displayState = form.submit();
         testLogger = "submitted";
@@ -103,6 +109,12 @@ public class Client extends ApplicationTemplate {
         return calendarDates.get();
     }
 
+
+    /**
+     * Submits the user's changes made to a single, scheduled {@link VaccinationDate}.
+     * @param   date
+     *          The scheduled date that was changed.
+     */
     public void confirmCalendarChange(VaccinationDate date) {
         if (date.getDate().equals(date.getTempDate())) {
             return;
@@ -141,7 +153,6 @@ public class Client extends ApplicationTemplate {
 
 
 //    TODO: Create an actual implementation, maybe
-
     /**
      * <strong>MOCK IMPLEMENTATION</strong>
      * <p>Adds a single FAKE {@link Vaccine} "dose" to the specified schedule (position in the {@link #calendarDates}.
