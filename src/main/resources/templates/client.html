@@ -32,8 +32,9 @@
             <div class="ps-5 row m-0 g-0">
             <std:foreach var="vaccine" in="vaccines">
                 <div class="form-check form-switch col-sm-6 col-lg-4 col-xl-3 pt-3">
+<!--                    TODO: maybe this could be bidir-checked-->
                     <input class="form-check-input" type="checkbox" role="switch" attr:id="'vaccineSwitch' + vaccine.getId()"
-                           html:checked="vaccine.isSelected()"
+                           html:checked="vaccine.selected"
                            html:checked-change="vaccine.setSelected(it)">
                     <label class="form-check-label" attr:for="'vaccineSwitch' + vaccine.getId()"><html:text value="vaccine.getName()"/></label>
                 </div>
@@ -75,7 +76,7 @@
                 </thead>
 
                 <tbody>
-                <std:foreach var="date" in="calendarDates">
+                <std:foreach var="date" in="calendar">
                     <tr>
                         <td class="d-none d-sm-table-cell">
                             <input type="date" class="form-control" html:bidir-value="date.tempDate"
@@ -94,11 +95,11 @@
                                 <button attr:class="'btn btn-danger' + (date.setToRemove ? '' : ' d-none')" type="button"
                                         event:click="confirmCalendarChange(date)">Usuń</button>
                             </div>
-                            <std:foreach var="vaccine" in="date.vaccines">
+                            <std:foreach var="dose" in="date.doses">
                                 <div class="dropup d-inline-block">
                                     <button class="btn btn-outline-primary dropdown-toggle m-1 text-wrap" type="button"
                                             data-bs-toggle="dropdown" aria-expanded="false" style="max-width: 18rem;">
-                                        <html:text value="vaccine.name"/>
+                                        <html:text value="dose.type.name"/>
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li class="dropdown-item" id="test" onclick="event.stopPropagation()">

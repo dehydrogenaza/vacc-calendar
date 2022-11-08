@@ -4,12 +4,11 @@ import org.dehydrogenaza.data.utils.TinyDate;
 
 import java.util.List;
 
-//TODO: Maybe rename to VaccinationSchedule or sth
 /**
- * A <strong>VaccinationDate</strong> represents a mapping of "calendar dates" to lists of vaccines scheduled for
+ * A <strong>ScheduleForDay</strong> represents a mapping of "calendar dates" to lists of vaccines scheduled for
  * that day.
  */
-public class VaccinationDate {
+public class ScheduleForDay {
 
     /**
      * Date as a YYYY-MM-DD <code>String</code>, which is the format used by web browsers for input fields.
@@ -18,8 +17,9 @@ public class VaccinationDate {
 
     /**
      * Internal YYYY-MM-DD date field, which is <strong>bidirectionally bound to an HTML input field</strong> for
-     * changing this VaccinationDate's date. After changes are confirmed by the user, if <code>tempDate</code> is
-     * empty, this object is removed from the calendar. Otherwise, its {@link #dateISO} and {@link #dateInternal}
+     * changing this ScheduleForDay's date. After changes are confirmed by the user, if <code>tempDate</code> is
+     * empty, this <code>ScheduleForDay</code> object is removed from the calendar. Otherwise, its {@link #dateISO} and
+     * {@link #dateInternal}
      * fields are updated to reflect the <code>tempDate</code>.
      */
     private String tempDate;
@@ -32,28 +32,22 @@ public class VaccinationDate {
     /**
      * Vaccines scheduled for this date.
      */
-    private final List<Vaccine> vaccinesScheduled;
-
-    /**
-     * Whether this object is marked for removal from {@link VaccinationCalendar}s. <strong>Probably a
-     * temporary solution.</strong>
-     */
-    public boolean flaggedForRemoval = false;
+    private final List<Dose> doses;
 
 
     /**
-     * Constructs a <code>VaccinationDate</code> given a properly formatted input date and a list of
-     * {@link Vaccine}s.
+     * Constructs a <code>ScheduleForDay</code> given a properly formatted input date and a list of
+     * {@link Dose}s.
      * @param   dateISO
      *          calendar date as YYYY-MM-DD.
      * @param   vaccines
      *          the list of vaccines to administer on that date.
      */
-    public VaccinationDate(String dateISO, List<Vaccine> vaccines) {
+    public ScheduleForDay(String dateISO, List<Dose> vaccines) {
         this.dateISO = dateISO;
         this.tempDate = dateISO;
         //TODO: Defensive copying? think if this should be immutable
-        this.vaccinesScheduled = vaccines;
+        this.doses = vaccines;
 
         dateInternal = new TinyDate(dateISO);
     }
@@ -93,28 +87,28 @@ public class VaccinationDate {
     }
 
     /**
-     * Getter for {@link #getVaccines()}.
+     * Getter for {@link #doses}.
      * @return
-     *          a list of {@link Vaccine}s scheduled for this date.
+     *          a list of {@link VaccineType}s scheduled for this date.
      */
-    public List<Vaccine> getVaccines() {
-        return vaccinesScheduled;
+    public List<Dose> getDoses() {
+        return doses;
     }
 
     /**
-     * Schedules an additional {@link Vaccine} to this date. <strong>Mutates</strong> the internal list
-     * {@link #vaccinesScheduled}.
+     * Schedules an additional {@link VaccineType} to this date. <strong>Mutates</strong> the internal list
+     * {@link #doses}.
      * @param   vaccine
      *          a vaccine to be added.
      */
-    public void addVaccine(Vaccine vaccine) {
-        vaccinesScheduled.add(vaccine);
+    public void addDose(Dose vaccine) {
+        doses.add(vaccine);
     }
 
 
     /**
      * Checks if the user entered a new <strong>nonempty, valid (<-- NOT YET IMPLEMENTED)</strong> date for this
-     * VaccinationDate.
+     * ScheduleForDay.
      * @return
      *          <code>true</code> if the internal <code>tempDate</code> (bound to an HTML input field) is different
      *          from the actual date field and isn't empty; <code>false</code> otherwise.
@@ -126,7 +120,7 @@ public class VaccinationDate {
 
 
     /**
-     * Checks if the user marked this VaccinationDate for removal, which is equivalent with entering nothing ("") in
+     * Checks if the user marked this ScheduleForDay for removal, which is equivalent with entering nothing ("") in
      * its input field.
      * @return
      *          <code>true</code> if the internal <code>tempDate</code> (bound to an HTML input field) is empty;

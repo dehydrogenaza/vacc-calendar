@@ -2,11 +2,11 @@ package org.dehydrogenaza.data;
 
 //TODO: Split this into "vaccine data/builder" and "vaccine instance/dose (with calendar date etc.)" classes
 /**
- * A <strong>Vaccine</strong> represents all the data associated with a single type of vaccination, such as the name
+ * A <strong>VaccineType</strong> represents all the data associated with a single type of vaccination, such as the name
  * of the product, its numeric identifier, number of doses and the recommended delay between doses.
- * <p>Vaccine objects also track whether the user chose to add the given vaccination to their calendar.</p>
+ * <p>VaccineType objects also track whether the user chose to add the given vaccination to their calendar.</p>
  */
-public class Vaccine {
+public class VaccineType {
 
     /**
      * Name of the product.
@@ -29,11 +29,11 @@ public class Vaccine {
      * Is this vaccination selected by the user. <strong>This value is bound bidirectionally with an HTML element
      * </strong>.
      */
-    private boolean isSelected;
+    private boolean selected;
 
 
     /**
-     * Constructs a Vaccine given its full data.
+     * Constructs a VaccineType given its full data.
      * @param   name
      *          name of the product.
      * @param   id
@@ -43,11 +43,11 @@ public class Vaccine {
      * @param   isSelected
      *          initial selection status.
      */
-    public Vaccine(String name, int id, int[] dateOffsets, boolean isSelected) {
+    public VaccineType(String name, int id, int[] dateOffsets, boolean isSelected) {
         this.name = name;
         this.id = id;
         this.dateOffsets = dateOffsets;
-        this.isSelected = isSelected;
+        this.selected = isSelected;
     }
 
     public String getName() {
@@ -63,10 +63,10 @@ public class Vaccine {
     }
 
     public boolean isSelected() {
-        return isSelected;
+        return selected;
     }
 
     public void setSelected(boolean selected) {
-        isSelected = selected;
+        this.selected = selected;
     }
 }

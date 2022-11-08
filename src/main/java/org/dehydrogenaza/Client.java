@@ -2,6 +2,7 @@ package org.dehydrogenaza;
 
 import org.dehydrogenaza.data.*;
 import org.dehydrogenaza.data.utils.DisplayState;
+import org.dehydrogenaza.data.utils.TinyDate;
 import org.teavm.flavour.templates.BindTemplate;
 import org.teavm.flavour.templates.Templates;
 import org.teavm.flavour.widgets.ApplicationTemplate;
@@ -36,7 +37,7 @@ public class Client extends ApplicationTemplate {
     /**
      * Stores a mapping of unique calendar dates to vaccinations scheduled for that day.
      */
-    private VaccinationCalendar calendarDates = new VaccinationCalendar();
+    private VaccinationCalendar calendar = new VaccinationCalendar();
 
 
     //  TODO: Remove test utility
@@ -63,7 +64,7 @@ public class Client extends ApplicationTemplate {
         Templates.bind(new Client(), "application-content");
     }
 
-    public List<Vaccine> getVaccines() {
+    public List<VaccineType> getVaccines() {
         //TODO: This should probably be taken from the SOURCE instead (the FORM takes it from there anyway)
         return form.getVaccines();
     }
@@ -94,46 +95,46 @@ public class Client extends ApplicationTemplate {
     /**
      * Finalizes initial user input in the main {@link Form}, queries its validity, and sets the application's state
      * accordingly. If everything is OK, the state should become {@link DisplayState#CALENDAR} and the
-     * {@link #calendarDates} field will be set to a new {@link VaccinationCalendar} instance.
+     * {@link #calendar} field will be set to a new {@link VaccinationCalendar} instance.
      */
     public void submit() {
         displayState = form.submit();
         testLogger = "submitted";
 
         if (displayState == DisplayState.CALENDAR) {
-            calendarDates = new VaccinationCalendar(form);
+            calendar = new VaccinationCalendar(form);
         }
     }
 
-    public List<VaccinationDate> getCalendarDates() {
-        return calendarDates.get();
+    public List<ScheduleForDay> getCalendar() {
+        return calendar.get();
     }
 
 
     /**
-     * Submits the user's changes made to a single, scheduled {@link VaccinationDate}.
+     * Submits the user's changes made to a single, scheduled {@link ScheduleForDay}.
      * @param   date
      *          The scheduled date that was changed.
      */
-    public void confirmCalendarChange(VaccinationDate date) {
+    public void confirmCalendarChange(ScheduleForDay date) {
         if (date.getDate().equals(date.getTempDate())) {
             return;
         }
-        calendarDates.updateDate(date);
+        calendar.updateDate(date);
     }
 
 
 //    TODO: Create an actual implementation
     /**
      * <strong>MOCK IMPLEMENTATION</strong>
-     * <p>Replaces a {@link VaccinationDate} with a new one (which should be probably passed as parameter, but
-     * currently isn't). This <strong>mutates</strong> the contents of {@link #calendarDates}.</p>
+     * <p>Replaces a {@link ScheduleForDay} with a new one (which should be probably passed as parameter, but
+     * currently isn't). This <strong>mutates</strong> the contents of {@link #calendar}.</p>
      * @param   date
      *          The date to be replaced (representing a unique calendar date and every vaccination scheduled for that
      *          date).
      */
-    public void changeDate(VaccinationDate date) {
-        calendarDates.changeDate(date);
+    public void changeDate(ScheduleForDay date) {
+        calendar.changeDate(date);
         testLogger = "Invoked from: " + date;
     }
 
@@ -141,21 +142,25 @@ public class Client extends ApplicationTemplate {
 //    TODO: Create an actual implementation, maybe
     /**
      * <strong>MOCK IMPLEMENTATION</strong>
-     * <p>Appends a new, FAKE {@link VaccinationDate} directly to the list in {@link #calendarDates}. Useful for
+     * <p>Appends a new, FAKE {@link ScheduleForDay} directly to the list in {@link #calendar}. Useful for
      * testing.</p>
      * <p>If this functionality is actually desired in the release version (which is somewhat likely), it should
      * probably be implemented in the {@link VaccinationCalendar}</p> class instead, and called from here.
      */
     public void addDate() {
-        List<Vaccine> mock = new ArrayList<>(form.getVaccines().subList(6,10));
-        calendarDates.get().add(new VaccinationDate("3000-06-05", mock));
+        List<VaccineType> mockTypes = new ArrayList<>(form.getVaccines().subList(6,10));
+        List<Dose> mockDoses = new ArrayList<>();
+        for (VaccineType type : mockTypes) {
+            mockDoses.add(new Dose(type, new TinyDate("3000-06-05")));
+        }
+        calendar.get().add(new ScheduleForDay("3000-06-05", mockDoses));
     }
 
 
 //    TODO: Create an actual implementation, maybe
     /**
      * <strong>MOCK IMPLEMENTATION</strong>
-     * <p>Adds a single FAKE {@link Vaccine} "dose" to the specified schedule (position in the {@link #calendarDates}.
+     * <p>Adds a single FAKE {@link VaccineType} "dose" to the specified schedule (position in the {@link #calendar}.
      * Useful for testing.</p>
      * <p>If this functionality is actually desired in the release version (which is somewhat likely), it should
      * probably be implemented in the {@link VaccinationCalendar}</p> class instead, and called from here.
@@ -163,7 +168,9 @@ public class Client extends ApplicationTemplate {
      *          position in the list of unique calendar dates, taken from the calling HTML component.
      */
     public void addVaccine(int index) {
-        calendarDates.get().get(index).addVaccine(new Vaccine("dodano", 1000, new int[]{0}, true));
-        testLogger="" + calendarDates.get().get(index).getVaccines();
+        calendar.get().get(index).addDose(new Dose(
+                new VaccineType("dodano", 1000, new int[]{0}, true),
+                new TinyDate(1905, 10, 10)));
+        testLogger="" + calendar.get().get(index).getDoses();
     }
 }

@@ -20,7 +20,7 @@ public class Form {
     /**
      * List of supported vaccines, taken from the {@link #source}.
      */
-    private final List<Vaccine> vaccines;
+    private final List<VaccineType> vaccines;
 
 
     /**
@@ -81,7 +81,7 @@ public class Form {
     }
 
 //  TODO: Refactor so that the SOURCE provides the full list, and FORM only the selected ones
-    public List<Vaccine> getVaccines() {
+    public List<VaccineType> getVaccines() {
         return vaccines;
     }
 

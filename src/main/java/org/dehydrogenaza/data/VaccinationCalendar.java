@@ -22,12 +22,12 @@ public class VaccinationCalendar {
     /**
      * Reference to the list of ALL supported vaccines (including ones that are not selected).
      */
-    private final List<Vaccine> vaccines;
+    private final List<VaccineType> vaccines;
 
     /**
-     * The main point of this class. A sorted list of {@link VaccinationDate}s.
+     * The main point of this class. A sorted list of {@link ScheduleForDay}s.
      */
-    private final List<VaccinationDate> calendarDates = new ArrayList<>();
+    private final List<ScheduleForDay> scheduledDates = new ArrayList<>();
 
 
     /**
@@ -46,7 +46,7 @@ public class VaccinationCalendar {
 
     /**
      * Constructs an empty calendar. Internal fields will be <code>null</code>s, except for
-     * {@link #calendarDates}, which is initialized to an empty {@link ArrayList}.
+     * {@link #scheduledDates}, which is initialized to an empty {@link ArrayList}.
      */
     public VaccinationCalendar() {
         this.form = null;
@@ -55,12 +55,12 @@ public class VaccinationCalendar {
 
 
     /**
-     * Fully removes a {@link VaccinationDate} (with every dose scheduled during that day) from this calendar.
+     * Fully removes a {@link ScheduleForDay} (with every dose scheduled during that day) from this calendar.
      * @param   date
-     *          {@link VaccinationDate} object to be removed, usually supplied by Flavour from an HTML input field.
+     *          {@link ScheduleForDay} object to be removed, usually supplied by Flavour from an HTML input field.
      */
-    public void removeDate(VaccinationDate date) {
-        calendarDates.remove(date);
+    public void removeDate(ScheduleForDay date) {
+        scheduledDates.remove(date);
     }
 
 
@@ -68,14 +68,18 @@ public class VaccinationCalendar {
     /**
      * <strong>MOCK IMPLEMENTATION</strong>, changes the given date to a preset one. Just for testing.
      * @param   oldDate
-     *          {@link VaccinationDate} to be replaced.
+     *          {@link ScheduleForDay} to be replaced.
      */
-    public void changeDate(VaccinationDate oldDate) {
+    public void changeDate(ScheduleForDay oldDate) {
         //for testing
-        List<Vaccine> mockList = new ArrayList<>(form.getVaccines().subList(3, 6));
-        VaccinationDate newDate = new VaccinationDate("1999-12-31", mockList);
+        List<VaccineType> mockTypes = new ArrayList<>(form.getVaccines().subList(3, 6));
+        List<Dose> mockDoses = new ArrayList<>();
+        for (VaccineType type : mockTypes) {
+            mockDoses.add(new Dose(type, new TinyDate("1999-12-31")));
+        }
+        ScheduleForDay newDate = new ScheduleForDay("1999-12-31", mockDoses);
 
-        calendarDates.replaceAll(date
+        scheduledDates.replaceAll(date
                 -> date.getDateAsNumber() == oldDate.getDateAsNumber() ? newDate : date);
         sortByDate();
 
@@ -83,15 +87,15 @@ public class VaccinationCalendar {
 
 
     /**
-     * Updates the calendar by either removing a given {@link VaccinationDate} instance (if its calendar date was set
+     * Updates the calendar by either removing a given {@link ScheduleForDay} instance (if its calendar date was set
      * to ""), or by rescheduling it to a new day (temporarily stored in its <code>tempDate</code> field). If the new
-     * calendar date already has some doses scheduled, the two VaccinationDate objects are conflated in place of the
+     * calendar date already has some doses scheduled, the two ScheduleForDay objects are conflated in place of the
      * existing (older) object, and the changedDate is removed from the calendar.
      * @param   changedDate
-     *          a {@link VaccinationDate} object which has its internal <code>tempDate</code> field changed and is
+     *          a {@link ScheduleForDay} object which has its internal <code>tempDate</code> field changed and is
      *          contained in this {@link VaccinationCalendar}.
      */
-    public void updateDate(VaccinationDate changedDate) {
+    public void updateDate(ScheduleForDay changedDate) {
         //empty input = remove from calendar completely
         if (changedDate.getTempDate().isEmpty()) {
             removeDate(changedDate);
@@ -100,23 +104,23 @@ public class VaccinationCalendar {
             //submit temp (input) value
             changedDate.update();
 
-            //TODO: Turn into a normal loop, flaggedForRemoval here instead of as a field
-            calendarDates.forEach(d -> {
+            boolean flaggedForRemoval = false;
+            for (ScheduleForDay d : scheduledDates) {
                 //don't do anything for the "changedDate" object itself
-                if (d.equals(changedDate)) {
-                    return;
+                if (d == changedDate) {
+                    continue;
                 }
-                //if *another* VaccinationDate has the same actual "date", merge their content
+                //if *another* ScheduleForDay has the same actual "date", merge their content
                 if (d.getDate().equals(changedDate.getDate())) {
-                    for (Vaccine vaccine : changedDate.getVaccines()) {
-                        d.addVaccine(vaccine);
+                    for (Dose dose : changedDate.getDoses()) {
+                        d.addDose(dose);
                     }
-                    changedDate.flaggedForRemoval = true;
+                    flaggedForRemoval = true;
                 }
-            });
+            }
 
             //if "changedDate"'s content was merged into another date, remove it
-            if (changedDate.flaggedForRemoval) {
+            if (flaggedForRemoval) {
                 removeDate(changedDate);
             }
 
@@ -130,7 +134,7 @@ public class VaccinationCalendar {
      */
     private void sortByDate() {
         //intentionally NOT using a Comparator (saves a few kB in the resulting JS)
-        calendarDates.sort((d1, d2)
+        scheduledDates.sort((d1, d2)
                 -> d1.getDateAsNumber() - d2.getDateAsNumber());
     }
 
@@ -139,55 +143,55 @@ public class VaccinationCalendar {
 //  TODO: Also, should probably be split into two methods for readability
 //  TODO: Refactor to use either TinyDate or its int value in the HashMap
     /**
-     * Populates the {@link #calendarDates} list with {@link VaccinationDate}s, unsorted at this point.
+     * Populates the {@link #scheduledDates} list with {@link ScheduleForDay}s, unsorted at this point.
      */
     private void buildCalendarDates() {
         //key: unique date --> values: vaccines scheduled for that date
-        Map<String, List<Vaccine>> mapOfAllVaccinationsOnGivenDates = new HashMap<>();
+        Map<String, List<Dose>> mapOfAllVaccinationsOnGivenDates = new HashMap<>();
 
         TinyDate startDate = new TinyDate(form.getDateOfFirstVaccination());
 
-        //TODO: Some of this should probably be moved to Vaccine
-        for (Vaccine vaccine : vaccines) {
-            if (!vaccine.isSelected()) {
+        //TODO: Some of this should probably be moved to VaccineType
+        for (VaccineType type : vaccines) {
+            if (!type.isSelected()) {
                 //skip if this vaccine is not selected
                 continue;
             }
             //each vaccine can have multiple doses, that are OFFSET by a certain number of days
-            for (int offsetInDays : vaccine.getDateOffsets()) {
+            for (int offsetInDays : type.getDateOffsets()) {
                 //when the dose should be administered
                 String dateOfVaccination = startDate.addDays(offsetInDays).toString();
 
                 if (mapOfAllVaccinationsOnGivenDates.containsKey(dateOfVaccination)) {
                     //something is already scheduled for this date
                     //therefore, we add this "dose" to the list instead of duplicating the date
-                    List<Vaccine> vaccinationsOnThisDate = mapOfAllVaccinationsOnGivenDates.get(dateOfVaccination);
-                    vaccinationsOnThisDate.add(vaccine);
+                    List<Dose> vaccinationsOnThisDate = mapOfAllVaccinationsOnGivenDates.get(dateOfVaccination);
+                    vaccinationsOnThisDate.add(new Dose(type, new TinyDate(dateOfVaccination)));
 
                 } else {
                     //nothing is scheduled for this date, yet
                     //create a new list and add this "dose" as its first item
-                    List<Vaccine> firstVaccineAtDate = new ArrayList<>();
-                    firstVaccineAtDate.add(vaccine);
-                    mapOfAllVaccinationsOnGivenDates.put(dateOfVaccination, firstVaccineAtDate);
+                    List<Dose> vaccinationsOnThisDate = new ArrayList<>();
+                    vaccinationsOnThisDate.add(new Dose(type, new TinyDate(dateOfVaccination)));
+                    mapOfAllVaccinationsOnGivenDates.put(dateOfVaccination, vaccinationsOnThisDate);
 
                 }
             }
         }
 
 //      TODO: This could be a separate method (maybe, could be overthinking)
-        //translate each key-value pair of our HashMap to a VaccinationDate instance
+        //translate each key-value pair of our HashMap to a ScheduleForDay instance
         //add them all to .calendarDates
         mapOfAllVaccinationsOnGivenDates.forEach(
-                (date, vaccinesAtDate) -> calendarDates.add(new VaccinationDate(date, vaccinesAtDate)));
+                (date, vaccinesAtDate) -> scheduledDates.add(new ScheduleForDay(date, vaccinesAtDate)));
     }
 
     /**
-     * Getter for {@link #calendarDates}.
+     * Getter for {@link #scheduledDates}.
      * @return
-     *          the (sorted) list of {@link VaccinationDate}s.
+     *          the (sorted) list of {@link ScheduleForDay}s.
      */
-    public List<VaccinationDate> get() {
-        return calendarDates;
+    public List<ScheduleForDay> get() {
+        return scheduledDates;
     }
 }
