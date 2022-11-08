@@ -115,6 +115,10 @@ public class TinyDate {
         this.day = day;
     }
 
+    public static TinyDate of(String date) {
+        return new TinyDate(date);
+    }
+
 
     /**
      * Returns a new TinyDate that represents a date that's some <code>offset</code> days after this date
@@ -205,5 +209,25 @@ public class TinyDate {
             return "0" + dateFragment;
         }
         return "" + dateFragment;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TinyDate tinyDate = (TinyDate) o;
+
+        if (year != tinyDate.year) return false;
+        if (month != tinyDate.month) return false;
+        return day == tinyDate.day;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = year;
+        result = 31 * result + month;
+        result = 31 * result + day;
+        return result;
     }
 }

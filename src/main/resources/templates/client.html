@@ -79,21 +79,29 @@
                 <std:foreach var="date" in="calendar">
                     <tr>
                         <td class="d-none d-sm-table-cell">
-                            <input type="date" class="form-control" html:bidir-value="date.tempDate"
+                            <input type="date" attr:class="'form-control' + (date.inBounds ? '' : ' is-invalid')"
+                                   html:bidir-value="date.tempDate"
                                    attr:id="'lgSchedule' + date.getDate()" aria-label="'schedule' + date.getDate()">
-                            <button attr:class="'btn btn-dark btn-sm mt-2' + (date.setToNew ? '' : ' d-none')" type="button"
+                            <button attr:class="'btn btn-dark btn-sm mt-2' + (date.setToConfirm ? '' : ' d-none')" type="button"
                                     event:click="confirmCalendarChange(date)">Potwierdź</button>
                             <button attr:class="'btn btn-danger btn-sm mt-2' + (date.setToRemove ? '' : ' d-none')" type="button"
                                     event:click="confirmCalendarChange(date)">Usuń</button>
+                            <div class="invalid-feedback">
+                                <html:text value="not date.inBounds ? 'Poza zakresem.' : ''"/>
+                            </div>
                         </td>
                         <td>
-                            <div class="d-flex d-sm-none justify-content-right">
-                                <input type="date" class="form-control d-sm-none" html:bidir-value="date.tempDate"
-                                   attr:id="'smSchedule' + date.getDate()" aria-label="'schedule' + date.getDate()">
-                                <button attr:class="'btn btn-dark' + (date.setToNew ? '' : ' d-none')" type="button"
+                            <div class="d-block d-sm-none justify-content-right">
+                                <input type="date" attr:class="'form-control d-sm-none' + (date.inBounds ? '' : ' is-invalid')"
+                                       html:bidir-value="date.tempDate"
+                                       attr:id="'smSchedule' + date.getDate()" aria-label="'schedule' + date.getDate()">
+                                <button attr:class="'btn btn-dark btn-sm mt-2' + (date.setToConfirm ? '' : ' d-none')" type="button"
                                     event:click="confirmCalendarChange(date)">Potwierdź</button>
-                                <button attr:class="'btn btn-danger' + (date.setToRemove ? '' : ' d-none')" type="button"
+                                <button attr:class="'btn btn-danger btn-sm mt-2' + (date.setToRemove ? '' : ' d-none')" type="button"
                                         event:click="confirmCalendarChange(date)">Usuń</button>
+                                <div class="invalid-feedback">
+                                    <html:text value="not date.inBounds ? 'Poza zakresem.' : ''"/>
+                                </div>
                             </div>
                             <std:foreach var="dose" in="date.doses">
                                 <div class="dropup d-inline-block">
@@ -104,10 +112,11 @@
                                     <ul class="dropdown-menu">
                                         <li class="dropdown-item" id="test" onclick="event.stopPropagation()">
                                             <small class="text-muted align-top">Zmień termin</small>
-                                            <input type="date" class="form-control" html:bidir-value="date.tempDate">
-<!--                                        TODO: Placeholder; this should replace a single dose instead-->
-                                            <button attr:class="'btn btn-dark btn-sm' + (date.setToNew ? '' : ' d-none')" type="button"
-                                                    event:click="confirmCalendarChange(date)">Potwierdź</button>
+                                            <input type="date" class="form-control" html:bidir-value="dose.tempDate">
+                                            <button attr:class="'btn btn-dark btn-sm mt-1 float-end' + (dose.setToNew ? '' : ' d-none')" type="button"
+                                                    event:click="confirmDoseChange(date, dose)">Potwierdź</button>
+                                            <button attr:class="'btn btn-danger btn-sm mt-1 float-end' + (dose.setToRemove ? '' : ' d-none')" type="button"
+                                                    event:click="confirmDoseChange(date, dose)">Usuń</button>
                                         </li>
                                         <li><a class="dropdown-item" href="#">Usuń (tylko tę dawkę)</a></li>
                                         <li><a class="dropdown-item" href="#">Usuń <span class="text-danger">(wszystkie dawki)</span></a></li>

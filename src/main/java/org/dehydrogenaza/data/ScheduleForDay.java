@@ -1,5 +1,6 @@
 package org.dehydrogenaza.data;
 
+import org.dehydrogenaza.data.utils.InputValidator;
 import org.dehydrogenaza.data.utils.TinyDate;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class ScheduleForDay {
      */
     private TinyDate dateInternal;
 
+
     /**
      * Vaccines scheduled for this date.
      */
@@ -53,18 +55,20 @@ public class ScheduleForDay {
     }
 
     /**
+     * Sets the internal calendar dates to the temporary field (which is bound to user input).
+     */
+    public void confirmTempValue() {
+        dateISO = tempDate;
+        dateInternal = new TinyDate(dateISO);
+    }
+
+    /**
      * Returns the date as a <code>String</code>.
      * @return
      *          the date in YYYY-MM-DD format.
      */
     public String getDate() {
         return dateISO;
-    }
-
-    public void update() {
-        dateISO = tempDate;
-
-        dateInternal = new TinyDate(dateISO);
     }
 
     /**
@@ -98,11 +102,15 @@ public class ScheduleForDay {
     /**
      * Schedules an additional {@link VaccineType} to this date. <strong>Mutates</strong> the internal list
      * {@link #doses}.
-     * @param   vaccine
-     *          a vaccine to be added.
+     * @param   dose
+     *          a vaccination to be added.
      */
-    public void addDose(Dose vaccine) {
-        doses.add(vaccine);
+    public void addDose(Dose dose) {
+        doses.add(dose);
+    }
+
+    public void removeDose(Dose dose) {
+        doses.remove(dose);
     }
 
 
@@ -128,5 +136,13 @@ public class ScheduleForDay {
      */
     public boolean isSetToRemove() {
         return tempDate.isEmpty();
+    }
+
+    public boolean isInBounds() {
+        return InputValidator.validate(tempDate);
+    }
+
+    public boolean isSetToConfirm() {
+        return isSetToNew() && isInBounds();
     }
 }

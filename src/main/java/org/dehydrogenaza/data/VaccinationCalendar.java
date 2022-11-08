@@ -24,6 +24,7 @@ public class VaccinationCalendar {
      */
     private final List<VaccineType> vaccines;
 
+    // TODO: try to reimplement using TreeSets and see if it costs a lot in terms of JS
     /**
      * The main point of this class. A sorted list of {@link ScheduleForDay}s.
      */
@@ -102,7 +103,7 @@ public class VaccinationCalendar {
         } else {
             //TODO: validation?
             //submit temp (input) value
-            changedDate.update();
+            changedDate.confirmTempValue();
 
             boolean flaggedForRemoval = false;
             for (ScheduleForDay d : scheduledDates) {
@@ -125,6 +126,39 @@ public class VaccinationCalendar {
             }
 
             sortByDate();
+        }
+    }
+
+    public void updateDose(ScheduleForDay changedDate, Dose changedDose) {
+        if (changedDose.isSetToNew()) {
+            Dose updatedDose = new Dose(changedDose.getType(), changedDose.getTempDate());
+
+            //search the calendar to see if a Schedule already exists for this new date
+            boolean addedToExisting = false;
+            for (ScheduleForDay date : scheduledDates) {
+                if (date.getDate().equals(updatedDose.getTempDate())) {
+                    date.addDose(updatedDose);
+                    addedToExisting = true;
+                    break;
+                }
+            }
+            if (!addedToExisting) {
+                List<Dose> vaccinesAtDate = new ArrayList<>();
+                vaccinesAtDate.add(updatedDose);
+                scheduledDates.add(new ScheduleForDay(updatedDose.getTempDate(), vaccinesAtDate));
+
+                // TODO: is this necessary? this shouldn't change the order, I think
+                //sortByDate();
+            }
+        }
+        removeDose(changedDate, changedDose);
+
+    }
+
+    private void removeDose(ScheduleForDay changedDate, Dose dose) {
+        changedDate.removeDose(dose);
+        if (changedDate.getDoses().isEmpty()) {
+            removeDate(changedDate);
         }
     }
 
@@ -165,15 +199,15 @@ public class VaccinationCalendar {
                 if (mapOfAllVaccinationsOnGivenDates.containsKey(dateOfVaccination)) {
                     //something is already scheduled for this date
                     //therefore, we add this "dose" to the list instead of duplicating the date
-                    List<Dose> vaccinationsOnThisDate = mapOfAllVaccinationsOnGivenDates.get(dateOfVaccination);
-                    vaccinationsOnThisDate.add(new Dose(type, new TinyDate(dateOfVaccination)));
+                    List<Dose> vaccinesAtDate = mapOfAllVaccinationsOnGivenDates.get(dateOfVaccination);
+                    vaccinesAtDate.add(new Dose(type, new TinyDate(dateOfVaccination)));
 
                 } else {
                     //nothing is scheduled for this date, yet
                     //create a new list and add this "dose" as its first item
-                    List<Dose> vaccinationsOnThisDate = new ArrayList<>();
-                    vaccinationsOnThisDate.add(new Dose(type, new TinyDate(dateOfVaccination)));
-                    mapOfAllVaccinationsOnGivenDates.put(dateOfVaccination, vaccinationsOnThisDate);
+                    List<Dose> vaccinesAtDate = new ArrayList<>();
+                    vaccinesAtDate.add(new Dose(type, new TinyDate(dateOfVaccination)));
+                    mapOfAllVaccinationsOnGivenDates.put(dateOfVaccination, vaccinesAtDate);
 
                 }
             }

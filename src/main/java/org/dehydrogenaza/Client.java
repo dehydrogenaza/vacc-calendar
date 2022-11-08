@@ -2,6 +2,7 @@ package org.dehydrogenaza;
 
 import org.dehydrogenaza.data.*;
 import org.dehydrogenaza.data.utils.DisplayState;
+import org.dehydrogenaza.data.utils.InputValidator;
 import org.dehydrogenaza.data.utils.TinyDate;
 import org.teavm.flavour.templates.BindTemplate;
 import org.teavm.flavour.templates.Templates;
@@ -57,6 +58,7 @@ public class Client extends ApplicationTemplate {
      * Not necessary for now, but potentially can be replaced by a <code>Client(DataSource)</code> constructor.
      */
     public Client() {
+        InputValidator.init(form);
     }
 
 
@@ -120,7 +122,16 @@ public class Client extends ApplicationTemplate {
         if (date.getDate().equals(date.getTempDate())) {
             return;
         }
-        calendar.updateDate(date);
+        if (date.isInBounds()) {
+            calendar.updateDate(date);
+        }
+    }
+
+    public void confirmDoseChange(ScheduleForDay date, Dose dose) {
+        if (dose.getDate().toString().equals(dose.getTempDate())) {
+            return;
+        }
+        calendar.updateDose(date, dose);
     }
 
 
