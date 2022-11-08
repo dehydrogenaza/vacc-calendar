@@ -32,10 +32,8 @@
             <div class="ps-5 row m-0 g-0">
             <std:foreach var="vaccine" in="vaccines">
                 <div class="form-check form-switch col-sm-6 col-lg-4 col-xl-3 pt-3">
-<!--                    TODO: maybe this could be bidir-checked-->
                     <input class="form-check-input" type="checkbox" role="switch" attr:id="'vaccineSwitch' + vaccine.getId()"
-                           html:checked="vaccine.selected"
-                           html:checked-change="vaccine.setSelected(it)">
+                           html:bidir-checked="vaccine.selected">
                     <label class="form-check-label" attr:for="'vaccineSwitch' + vaccine.getId()"><html:text value="vaccine.getName()"/></label>
                 </div>
             </std:foreach>
@@ -64,12 +62,13 @@
 <div attr:class="displayState == DisplayState.CALENDAR ? 'container-fluid pt-3' : 'd-none'">
     <div class="border rounded-4 p-4 bg-light">
         <section class="container-fluid g-0 justify-content-center">
-            <h4 class="display-6 mb-3">3. Kalendarz</h4>
+            <h4 class="display-6">3. Kalendarz</h4>
+            <p class="text-muted my-2 d-none d-md-block">Kliknij datę lub szczepionkę, by dokonać zmian.</p>
+            <small class="text-muted my-2 d-md-none">Naciśnij datę lub szczepionkę, by dokonać zmian.</small>
 
             <table class="table align-middle table-hover">
                 <thead>
                 <tr class="d-none d-sm-table-row">
-<!--                    TODO: Add <small> tags with instructions, "zmień termin" or sth-->
                     <th class="col-2">Data</th>
                     <th>Szczepionki</th>
                 </tr>
@@ -111,12 +110,16 @@
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li class="dropdown-item" id="test" onclick="event.stopPropagation()">
-                                            <small class="text-muted align-top">Zmień termin</small>
-                                            <input type="date" class="form-control" html:bidir-value="dose.tempDate">
-                                            <button attr:class="'btn btn-dark btn-sm mt-1 float-end' + (dose.setToNew ? '' : ' d-none')" type="button"
+                                            <small class="text-muted">Zmień termin</small>
+                                            <input type="date" attr:class="'form-control' + (dose.inBounds ? '' : ' is-invalid')"
+                                                   html:bidir-value="dose.tempDate">
+                                            <button attr:class="'btn btn-dark btn-sm mt-2 float-end' + (dose.setToConfirm ? '' : ' d-none')" type="button"
                                                     event:click="confirmDoseChange(date, dose)">Potwierdź</button>
-                                            <button attr:class="'btn btn-danger btn-sm mt-1 float-end' + (dose.setToRemove ? '' : ' d-none')" type="button"
+                                            <button attr:class="'btn btn-danger btn-sm mt-2 float-end' + (dose.setToRemove ? '' : ' d-none')" type="button"
                                                     event:click="confirmDoseChange(date, dose)">Usuń</button>
+                                            <small class="text-danger">
+                                                <html:text value="not dose.inBounds ? 'Poza zakresem.' : ''"/>
+                                            </small>
                                         </li>
                                         <li><a class="dropdown-item" href="#">Usuń (tylko tę dawkę)</a></li>
                                         <li><a class="dropdown-item" href="#">Usuń <span class="text-danger">(wszystkie dawki)</span></a></li>

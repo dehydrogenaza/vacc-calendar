@@ -38,7 +38,6 @@ public class Dose {
     }
 
     public boolean isSetToNew() {
-        //TODO: Add full validation
         return !date.toString().equals(tempDate) && !tempDate.isEmpty();
     }
 
@@ -47,7 +46,7 @@ public class Dose {
     }
 
     public boolean isInBounds() {
-        return InputValidator.validate(tempDate);
+        return InputValidator.validateBounds(tempDate);
     }
 
     public boolean isSetToConfirm() {

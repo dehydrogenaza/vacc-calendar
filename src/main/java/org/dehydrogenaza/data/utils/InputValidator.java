@@ -9,7 +9,7 @@ public class InputValidator {
         InputValidator.form = form;
     }
 
-    public static boolean validate(String date) {
+    public static boolean validateBounds(String date) {
         if (date.isEmpty()) {
             return true;
         }

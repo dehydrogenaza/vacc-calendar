@@ -131,11 +131,13 @@ public class Client extends ApplicationTemplate {
         if (dose.getDate().toString().equals(dose.getTempDate())) {
             return;
         }
-        calendar.updateDose(date, dose);
+        if (dose.isInBounds()) {
+            calendar.updateDose(date, dose);
+        }
     }
 
 
-//    TODO: Create an actual implementation
+//    TODO: Create an actual implementation + remove test util
     /**
      * <strong>MOCK IMPLEMENTATION</strong>
      * <p>Replaces a {@link ScheduleForDay} with a new one (which should be probably passed as parameter, but
@@ -150,7 +152,7 @@ public class Client extends ApplicationTemplate {
     }
 
 
-//    TODO: Create an actual implementation, maybe
+//    TODO: Create an actual implementation (maybe) + remove test util
     /**
      * <strong>MOCK IMPLEMENTATION</strong>
      * <p>Appends a new, FAKE {@link ScheduleForDay} directly to the list in {@link #calendar}. Useful for
@@ -168,7 +170,7 @@ public class Client extends ApplicationTemplate {
     }
 
 
-//    TODO: Create an actual implementation, maybe
+//    TODO: Create an actual implementation (maybe) + remove test util
     /**
      * <strong>MOCK IMPLEMENTATION</strong>
      * <p>Adds a single FAKE {@link VaccineType} "dose" to the specified schedule (position in the {@link #calendar}.

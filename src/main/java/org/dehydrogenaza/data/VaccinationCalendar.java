@@ -101,7 +101,6 @@ public class VaccinationCalendar {
         if (changedDate.getTempDate().isEmpty()) {
             removeDate(changedDate);
         } else {
-            //TODO: validation?
             //submit temp (input) value
             changedDate.confirmTempValue();
 
@@ -147,8 +146,7 @@ public class VaccinationCalendar {
                 vaccinesAtDate.add(updatedDose);
                 scheduledDates.add(new ScheduleForDay(updatedDose.getTempDate(), vaccinesAtDate));
 
-                // TODO: is this necessary? this shouldn't change the order, I think
-                //sortByDate();
+                sortByDate();
             }
         }
         removeDose(changedDate, changedDose);

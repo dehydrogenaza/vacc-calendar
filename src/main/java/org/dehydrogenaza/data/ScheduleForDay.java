@@ -122,7 +122,6 @@ public class ScheduleForDay {
      *          from the actual date field and isn't empty; <code>false</code> otherwise.
      */
     public boolean isSetToNew() {
-        //TODO: Add full validation
         return !dateISO.equals(tempDate) && !tempDate.isEmpty();
     }
 
@@ -139,7 +138,7 @@ public class ScheduleForDay {
     }
 
     public boolean isInBounds() {
-        return InputValidator.validate(tempDate);
+        return InputValidator.validateBounds(tempDate);
     }
 
     public boolean isSetToConfirm() {
