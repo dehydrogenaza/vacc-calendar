@@ -128,6 +128,7 @@ public class VaccinationCalendar {
         }
     }
 
+    // TODO: not sure if this should allow to remove a dose since that function has a separate UI button
     public void updateDose(ScheduleForDay changedDate, Dose changedDose) {
         if (changedDose.isSetToNew()) {
             Dose updatedDose = new Dose(changedDose.getType(), changedDose.getTempDate());
@@ -153,7 +154,7 @@ public class VaccinationCalendar {
 
     }
 
-    private void removeDose(ScheduleForDay changedDate, Dose dose) {
+    public void removeDose(ScheduleForDay changedDate, Dose dose) {
         changedDate.removeDose(dose);
         if (changedDate.getDoses().isEmpty()) {
             removeDate(changedDate);

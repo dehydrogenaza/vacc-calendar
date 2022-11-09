@@ -136,6 +136,10 @@ public class Client extends ApplicationTemplate {
         }
     }
 
+    public void removeDose(ScheduleForDay date, Dose dose) {
+        calendar.removeDose(date, dose);
+    }
+
 
 //    TODO: Create an actual implementation + remove test util
     /**

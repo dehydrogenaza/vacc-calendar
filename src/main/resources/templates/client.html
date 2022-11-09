@@ -121,8 +121,15 @@
                                                 <html:text value="not dose.inBounds ? 'Poza zakresem.' : ''"/>
                                             </small>
                                         </li>
-                                        <li><a class="dropdown-item" href="#">Usuń (tylko tę dawkę)</a></li>
-                                        <li><a class="dropdown-item" href="#">Usuń <span class="text-danger">(wszystkie dawki)</span></a></li>
+<!--                                        <li><a class="dropdown-item" href="#" onclick="return false" event:click="removeDose(date, dose)">-->
+<!--                                            Usuń (tylko tę dawkę)-->
+<!--                                        </a></li>-->
+                                        <li><p class="dropdown-item" style="cursor: pointer;" event:click="removeDose(date, dose)">
+                                            Usuń (tylko tę dawkę)
+                                        </p></li>
+                                        <li><p class="dropdown-item" style="cursor: pointer;">
+                                            Usuń <span class="text-danger">(wszystkie dawki)</span>
+                                        </p></li>
                                     </ul>
                                 </div>
                             </std:foreach>
