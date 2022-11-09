@@ -140,6 +140,10 @@ public class Client extends ApplicationTemplate {
         calendar.removeDose(date, dose);
     }
 
+    public void removeAllOfType(VaccineType type) {
+        calendar.removeAllOfType(type);
+    }
+
 
 //    TODO: Create an actual implementation + remove test util
     /**

@@ -161,6 +161,13 @@ public class VaccinationCalendar {
         }
     }
 
+    public void removeAllOfType(VaccineType type) {
+        for (ScheduleForDay date : scheduledDates) {
+            date.getDoses().removeIf(dose -> VaccineType.isSame(dose.getType(), type));
+        }
+        scheduledDates.removeIf(date -> date.getDoses().isEmpty());
+    }
+
 
     /**
      * Sorts in ascending order, earliest to latest. <strong>Mutates</strong> the original list.

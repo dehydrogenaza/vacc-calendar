@@ -68,4 +68,8 @@ public class VaccineType {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
+
+    public static boolean isSame(VaccineType v1, VaccineType v2) {
+        return v1.id == v2.id;
+    }
 }

@@ -124,10 +124,12 @@
 <!--                                        <li><a class="dropdown-item" href="#" onclick="return false" event:click="removeDose(date, dose)">-->
 <!--                                            Usuń (tylko tę dawkę)-->
 <!--                                        </a></li>-->
-                                        <li><p class="dropdown-item" style="cursor: pointer;" event:click="removeDose(date, dose)">
+                                        <li><p class="dropdown-item my-1" style="cursor: pointer;"
+                                               event:click="removeDose(date, dose)">
                                             Usuń (tylko tę dawkę)
                                         </p></li>
-                                        <li><p class="dropdown-item" style="cursor: pointer;">
+                                        <li><p class="dropdown-item my-1" style="cursor: pointer;"
+                                               event:click="removeAllOfType(dose.type)">
                                             Usuń <span class="text-danger">(wszystkie dawki)</span>
                                         </p></li>
                                     </ul>
