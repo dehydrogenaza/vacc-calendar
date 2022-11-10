@@ -129,6 +129,18 @@ public class VaccinationCalendar {
     }
 
     // TODO: not sure if this should allow to remove a dose since that function has a separate UI button
+    /**
+     * Updates the calendar by either removing a given {@link Dose} instance (if its calendar date was set
+     * to ""), or by rescheduling it to a new day (temporarily stored in its <code>tempDate</code> field). If
+     * the new calendar date already has some doses scheduled, this one is simply appended to the list, otherwise a
+     * new {@link ScheduleForDay} instance is created. If this was the only dose on a given day, its original
+     * ScheduleForDay is removed.
+     * @param   changedDate
+     *          the {@link ScheduleForDay} to which this Dose belongs.
+     * @param   changedDose
+     *          a {@link Dose} object which has its internal <code>tempDate</code> field changed and is contained in
+     *          <code>changedDate</code>
+     */
     public void updateDose(ScheduleForDay changedDate, Dose changedDose) {
         if (changedDose.isSetToNew()) {
             Dose updatedDose = new Dose(changedDose.getType(), changedDose.getTempDate());
@@ -154,6 +166,14 @@ public class VaccinationCalendar {
 
     }
 
+    /**
+     * Removes a {@link Dose} from its {@link ScheduleForDay}. If this was the only dose scheduled on that day, the
+     * ScheduleForDay object is removed from this calendar too.
+     * @param   changedDate
+     *          a ScheduleForDay for which the <code>dose</code> belongs.
+     * @param   dose
+     *          a Dose to be removed, usually supplied by Flavour from an HTML input field.
+     */
     public void removeDose(ScheduleForDay changedDate, Dose dose) {
         changedDate.removeDose(dose);
         if (changedDate.getDoses().isEmpty()) {
@@ -161,6 +181,13 @@ public class VaccinationCalendar {
         }
     }
 
+
+    /**
+     * Removes all {@link Dose}s of a given {@link VaccineType} from this calendar, removing empty
+     * {@link ScheduleForDay}s as needed.
+     * @param   type
+     *          a VaccineType to be purged from this calendar.
+     */
     public void removeAllOfType(VaccineType type) {
         for (ScheduleForDay date : scheduledDates) {
             date.getDoses().removeIf(dose -> VaccineType.isSame(dose.getType(), type));
