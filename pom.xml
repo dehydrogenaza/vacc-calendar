@@ -16,7 +16,8 @@
     <flavour.version>0.2.1</flavour.version>
     <teavm.version>0.7.0</teavm.version>
     <jackson.version>2.13.4</jackson.version>
-    <tomcat.version>7.0.76</tomcat.version>
+<!--    <tomcat.version>7.0.76</tomcat.version>-->
+    <tomcat.version>7.0.108</tomcat.version>
   </properties>
 
   <dependencies>
