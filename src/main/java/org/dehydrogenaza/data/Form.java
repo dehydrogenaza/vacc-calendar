@@ -22,6 +22,8 @@ public class Form {
      */
     private final List<VaccineType> vaccines;
 
+    private final List<VaccinationScheme> schemes;
+
 
     /**
      * Child's birthdate.
@@ -78,11 +80,16 @@ public class Form {
         this.source = source;
 
         this.vaccines = source.getVaccines();
+        this.schemes = source.getSchemes();
     }
 
 //  TODO: Refactor so that the SOURCE provides the full list, and FORM only the selected ones
     public List<VaccineType> getVaccines() {
         return vaccines;
+    }
+
+    public List<VaccinationScheme> getSchemes() {
+        return schemes;
     }
 
     public String getDateOfBirth() {

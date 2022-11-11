@@ -27,16 +27,45 @@
             </div>
         </section>
 
-        <section class="mt-5 g-0" id="vaccineSelectionSection">
-            <h4 class="display-6 mb-2">2. Co wszczyknąć xD</h4>
-            <div class="ps-5 row m-0 g-0">
-            <std:foreach var="vaccine" in="vaccines">
-                <div class="form-check form-switch col-sm-6 col-lg-4 col-xl-3 pt-3">
-                    <input class="form-check-input" type="checkbox" role="switch" attr:id="'vaccineSwitch' + vaccine.getId()"
-                           html:bidir-checked="vaccine.selected">
-                    <label class="form-check-label" attr:for="'vaccineSwitch' + vaccine.getId()"><html:text value="vaccine.getName()"/></label>
+<!--        <section class="mt-5 g-0" id="vaccineSelectionSection">-->
+<!--            <h4 class="display-6 mb-2">2. Co wszczyknąć xD</h4>-->
+<!--            <div class="ps-5 row m-0 g-0">-->
+<!--            <std:foreach var="vaccine" in="vaccines">-->
+<!--                <div class="form-check form-switch col-sm-6 col-lg-4 col-xl-3 pt-3">-->
+<!--                    <input class="form-check-input" type="checkbox" role="switch" attr:id="'vaccineSwitch' + vaccine.getId()"-->
+<!--                           html:bidir-checked="vaccine.selected">-->
+<!--                    <label class="form-check-label" attr:for="'vaccineSwitch' + vaccine.getId()"><html:text value="vaccine.getName()"/></label>-->
+<!--                </div>-->
+<!--            </std:foreach>-->
+<!--            </div>-->
+<!--        </section>-->
+
+        <section>
+            <h4 class="display-6 my-3">2. Co wszczyknąć xD</h4>
+            <div class="row px-2 g-0">
+                <div class="col-md-3 pe-3">
+                    <ul class="list-group">
+                        <std:foreach var="scheme" in="schemes">
+                            <li class="list-group-item">
+                                <input class="form-check-input me-1" type="radio" name="schemeRadio"
+                                       attr:id="'schemeRadio' + scheme.id" html:bidir-checked="scheme.checked">
+                                <label class="form-check-label stretched-link"
+                                       attr:for="'schemeRadio' + scheme.id"><html:text value="scheme.name"/></label>
+                            </li>
+                        </std:foreach>
+                    </ul>
                 </div>
-            </std:foreach>
+                <div class="col-md-9 pt-1">
+                    <std:foreach var="vax" in="vaccines">
+                        <div class="form-check form-check-inline form-switch m-2">
+                            <input class="form-check-input" role="switch" type="checkbox" attr:id="'vaxSwitch' + vax.id"
+                                   html:bidir-checked="vax.selected">
+                            <label class="form-check-label" attr:for="'vaxSwitch' + vax.id">
+                                <html:text value="vax.name"/>
+                            </label>
+                        </div>
+                    </std:foreach>
+                </div>
             </div>
         </section>
     </div>

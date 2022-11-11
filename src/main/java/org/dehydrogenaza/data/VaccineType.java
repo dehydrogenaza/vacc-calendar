@@ -1,5 +1,7 @@
 package org.dehydrogenaza.data;
 
+import java.util.List;
+
 /**
  * A <strong>VaccineType</strong> represents all the data associated with a single type of vaccination, such as the name
  * of the product, its numeric identifier, number of doses and the recommended delay between doses.
@@ -71,5 +73,12 @@ public class VaccineType {
 
     public static boolean isSame(VaccineType v1, VaccineType v2) {
         return v1.id == v2.id;
+    }
+
+    public boolean isMultiType() {
+        return false;
+    }
+    public List<VaccineType> getSubtypes() {
+        return List.of(this);
     }
 }

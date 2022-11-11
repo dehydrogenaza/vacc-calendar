@@ -71,6 +71,10 @@ public class Client extends ApplicationTemplate {
         return form.getVaccines();
     }
 
+    public List<VaccinationScheme> getSchemes() {
+        return form.getSchemes();
+    }
+
     public DataSource getSource() {
         return source;
     }
