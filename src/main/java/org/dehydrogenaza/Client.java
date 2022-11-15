@@ -3,6 +3,7 @@ package org.dehydrogenaza;
 import org.dehydrogenaza.data.*;
 import org.dehydrogenaza.data.utils.DisplayState;
 import org.dehydrogenaza.data.utils.InputValidator;
+import org.dehydrogenaza.data.utils.TableBox;
 import org.dehydrogenaza.data.utils.TinyDate;
 import org.teavm.flavour.templates.BindTemplate;
 import org.teavm.flavour.templates.Templates;
@@ -194,7 +195,7 @@ public class Client extends ApplicationTemplate {
      */
     public void addVaccine(int index) {
         calendar.get().get(index).addDose(new Dose(
-                new VaccineType("dodano", 1000, new int[]{0}, true),
+                new VaccineType("dodano", "choroba", 1000, new int[]{0}, new ArrayList<>(), true),
                 new TinyDate(1905, 10, 10)));
         testLogger="" + calendar.get().get(index).getDoses();
     }

@@ -1,5 +1,7 @@
 package org.dehydrogenaza.data;
 
+import org.dehydrogenaza.data.utils.TableBox;
+
 import java.util.List;
 
 /**
@@ -14,6 +16,8 @@ public class VaccineType {
      */
     private final String name;
 
+    private final String disease;
+
     /**
      * Unique number, for internal identification, not visible to the end user.
      */
@@ -25,6 +29,8 @@ public class VaccineType {
      * <p>An offset of "0" means that the given dose should be administered right at the start point.</p>
      */
     private final int[] dateOffsets;
+
+    private final List<TableBox> displayBoxes;
 
     /**
      * Is this vaccination selected by the user. <strong>This value is bound bidirectionally with an HTML element
@@ -44,15 +50,22 @@ public class VaccineType {
      * @param   isSelected
      *          initial selection status.
      */
-    public VaccineType(String name, int id, int[] dateOffsets, boolean isSelected) {
+    public VaccineType(String name, String disease, int id, int[] dateOffsets, List<TableBox> displayBoxes,
+                       boolean isSelected) {
         this.name = name;
+        this.disease = disease;
         this.id = id;
         this.dateOffsets = dateOffsets;
+        this.displayBoxes = displayBoxes;
         this.selected = isSelected;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getDisease() {
+        return disease;
     }
 
     public int getId() {
@@ -71,14 +84,11 @@ public class VaccineType {
         this.selected = selected;
     }
 
-    public static boolean isSame(VaccineType v1, VaccineType v2) {
-        return v1.id == v2.id;
+    public List<TableBox> getBoxes() {
+        return displayBoxes;
     }
 
-    public boolean isMultiType() {
-        return false;
-    }
-    public List<VaccineType> getSubtypes() {
-        return List.of(this);
+    public static boolean isSame(VaccineType v1, VaccineType v2) {
+        return v1.id == v2.id;
     }
 }
