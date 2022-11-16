@@ -174,16 +174,21 @@
                 </tbody>
             </table>
 
-            <button class="btn btn-primary btn-lg d-flex mx-auto align-items-middle" type="button"
-                    event:click="submit()">⟳ Od nowa
-            </button>
+            <div class="row justify-content-center">
+                <a href="#" role="button" class="btn btn-primary btn-lg col-6 col-md-3 m-2"
+                        event:click="submit()">⟳ Od nowa
+                </a>
+                <a attr:href="CSVExportURI" role="button" class="btn btn-primary btn-lg col-6 col-md-3 m-2"
+                        download="Daty szczepień.csv">Eksport do pliku
+                </a>
+            </div>
         </section>
     </div>
 
     <div class="border rounded-4 p-4 bg-light mt-3">
         <section class="container-fluid g-0 justify-content-center">
             <h4 class="display-6 mb-3">4. Terminy zalecane</h4>
-<!--            style="table-layout: fixed;"-->
+            <!--            style="table-layout: fixed;"-->
             <table class="table table-borderless text-center">
                 <thead class="table-dark">
                 <tr>

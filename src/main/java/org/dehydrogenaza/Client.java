@@ -1,10 +1,7 @@
 package org.dehydrogenaza;
 
 import org.dehydrogenaza.data.*;
-import org.dehydrogenaza.data.utils.DisplayState;
-import org.dehydrogenaza.data.utils.InputValidator;
-import org.dehydrogenaza.data.utils.TableBox;
-import org.dehydrogenaza.data.utils.TinyDate;
+import org.dehydrogenaza.data.utils.*;
 import org.teavm.flavour.templates.BindTemplate;
 import org.teavm.flavour.templates.Templates;
 import org.teavm.flavour.widgets.ApplicationTemplate;
@@ -111,6 +108,10 @@ public class Client extends ApplicationTemplate {
         if (displayState == DisplayState.CALENDAR) {
             calendar = new VaccinationCalendar(form);
         }
+    }
+
+    public String getCSVExportURI() {
+        return CSVWriter.getDataURI(calendar.get());
     }
 
     public List<ScheduleForDay> getCalendar() {
