@@ -14,11 +14,11 @@ public class Form {
     /**
      * Source of internal data.
      */
-    private final DataSource source;
+    private final DataProvider dataProvider;
 
 
     /**
-     * List of supported vaccines, taken from the {@link #source}.
+     * List of supported vaccines, taken from the {@link #dataProvider}.
      */
     private final List<VaccineType> vaccines;
 
@@ -72,15 +72,15 @@ public class Form {
 
 
     /**
-     * Constructs the initial Form, pulling vaccine data from the provided {@link DataSource}.
-     * @param   source
+     * Constructs the initial Form, pulling vaccine data from the provided {@link DataProvider}.
+     * @param   dataProvider
      *          Source of supported vaccine data.
      */
-    public Form(DataSource source) {
-        this.source = source;
+    public Form(DataProvider dataProvider) {
+        this.dataProvider = dataProvider;
 
-        this.vaccines = source.getVaccines();
-        this.schemes = source.getSchemes();
+        this.vaccines = dataProvider.getVaccines();
+        this.schemes = dataProvider.getSchemes();
     }
 
 //  TODO: Refactor so that the SOURCE provides the full list, and FORM only the selected ones

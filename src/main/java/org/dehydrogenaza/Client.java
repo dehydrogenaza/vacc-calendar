@@ -1,6 +1,7 @@
 package org.dehydrogenaza;
 
 import org.dehydrogenaza.data.*;
+import org.dehydrogenaza.data.datasources.FakeVaccinationSource;
 import org.dehydrogenaza.data.utils.*;
 import org.teavm.flavour.templates.BindTemplate;
 import org.teavm.flavour.templates.Templates;
@@ -25,12 +26,12 @@ public class Client extends ApplicationTemplate {
     /**
      * The source of vaccination data. Currently, just a mock, but will be read probably from a JSON file later.
      */
-    private final DataSource source = new DataSource();
+    private final DataProvider dataProvider = new DataProvider(new FakeVaccinationSource());
 
     /**
      * The input form: date of birth, date of first vaccination, choice of vaccinations, agreements etc.
      */
-    private final Form form = new Form(source);
+    private final Form form = new Form(dataProvider);
 
 
     /**
@@ -53,7 +54,7 @@ public class Client extends ApplicationTemplate {
 
 
     /**
-     * Not necessary for now, but potentially can be replaced by a <code>Client(DataSource)</code> constructor.
+     * Not necessary for now, but potentially can be replaced by a <code>Client(DataProvider)</code> constructor.
      */
     public Client() {
         InputValidator.init(form);
@@ -73,8 +74,8 @@ public class Client extends ApplicationTemplate {
         return form.getSchemes();
     }
 
-    public DataSource getSource() {
-        return source;
+    public DataProvider getDataProvider() {
+        return dataProvider;
     }
 
     public Form getForm() {

@@ -87,6 +87,7 @@ public class VaccinationCalendar {
     }
 
 
+    // TODO: BUGGED. Moving the entire date does not effect dates (maybe just tempDates?) of individual Doses.
     /**
      * Updates the calendar by either removing a given {@link ScheduleForDay} instance (if its calendar date was set
      * to ""), or by rescheduling it to a new day (temporarily stored in its <code>tempDate</code> field). If the new

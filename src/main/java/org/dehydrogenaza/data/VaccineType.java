@@ -1,6 +1,6 @@
 package org.dehydrogenaza.data;
 
-import org.dehydrogenaza.data.utils.TableBox;
+import org.dehydrogenaza.data.utils.RecommendationTableBox;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class VaccineType {
      */
     private final int[] dateOffsets;
 
-    private final List<TableBox> displayBoxes;
+    private final List<RecommendationTableBox> displayBoxes;
 
     /**
      * Is this vaccination selected by the user. <strong>This value is bound bidirectionally with an HTML element
@@ -50,7 +50,7 @@ public class VaccineType {
      * @param   isSelected
      *          initial selection status.
      */
-    public VaccineType(String name, String disease, int id, int[] dateOffsets, List<TableBox> displayBoxes,
+    public VaccineType(String name, String disease, int id, int[] dateOffsets, List<RecommendationTableBox> displayBoxes,
                        boolean isSelected) {
         this.name = name;
         this.disease = disease;
@@ -84,7 +84,7 @@ public class VaccineType {
         this.selected = selected;
     }
 
-    public List<TableBox> getBoxes() {
+    public List<RecommendationTableBox> getBoxes() {
         return displayBoxes;
     }
 
