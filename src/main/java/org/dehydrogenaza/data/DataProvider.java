@@ -11,7 +11,9 @@ import java.util.List;
 /**
  * Mock implementation of the initial data provider. Creates and serves fake data, such as vaccine names, number of
  * vaccinations etc.
- * <p>Proper implementation will probably read the data from a JSON file.</p>
+ * <p>Proper implementation will probably read the data from a JSON file. <strong>Nope, that costs a ton in terms of
+ * JS size!</strong>
+ * </strong></p>
  */
 public class DataProvider {
     private IVaccineSource vaccinesSource;
@@ -41,8 +43,8 @@ public class DataProvider {
         return vaccinesSource.getVaccines();
     }
 
-    public void setVaccinesSource(IVaccineSource vaccinesSource) {
-        this.vaccinesSource = vaccinesSource;
+    public void changeChosenVaccinationScheme(IVaccineSource newSource) {
+        vaccinesSource = newSource;
     }
 
 }

@@ -201,4 +201,8 @@ public class Client extends ApplicationTemplate {
                 new TinyDate(1905, 10, 10)));
         testLogger="" + calendar.get().get(index).getDoses();
     }
+
+    public void setChosenScheme(String schemeID) {
+        form.setChosenScheme(schemeID);
+    }
 }

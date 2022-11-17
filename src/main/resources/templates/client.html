@@ -36,7 +36,7 @@
                         <std:foreach var="scheme" in="schemes">
                             <li class="list-group-item">
                                 <input class="form-check-input me-1" type="radio" name="schemeRadio"
-                                       attr:id="'schemeRadio' + scheme.id" html:bidir-checked="scheme.checked">
+                                       attr:id="'schemeRadio' + scheme.id" html:bidir-checked="scheme.checked" html:change="chosenScheme" attr:value="scheme.id">
                                 <label class="form-check-label stretched-link"
                                        attr:for="'schemeRadio' + scheme.id">
                                     <html:text value="scheme.name"/>
