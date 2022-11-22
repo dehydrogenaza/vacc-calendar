@@ -27,7 +27,7 @@ public class Form {
 
     private final List<VaccinationScheme> schemes;
 
-    private String chosenScheme = "0";
+//    private String chosenScheme = "0";
 
 
     /**
@@ -140,26 +140,6 @@ public class Form {
 
     public boolean isDateOfFirstVaccinationTooEarly() {
         return dateOfFirstVaccinationTooEarly;
-    }
-
-    public void setChosenScheme(String schemeID) {
-        this.chosenScheme = schemeID;
-
-        IVaccineSource newSchemeSource;
-        switch (schemeID) {
-            case "0":
-                newSchemeSource = new FakeVaccinationSource();
-                break;
-            case "1":
-                newSchemeSource = new FreeVaccinationSource();
-                break;
-            default:
-                newSchemeSource = new FreeVaccinationSource();
-        }
-
-        dataProvider.changeChosenVaccinationScheme(newSchemeSource);
-        vaccines.clear();
-        vaccines.addAll(dataProvider.getVaccines());
     }
 
     //  TODO: Remove test utility

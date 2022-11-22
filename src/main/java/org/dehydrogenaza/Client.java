@@ -2,6 +2,8 @@ package org.dehydrogenaza;
 
 import org.dehydrogenaza.data.*;
 import org.dehydrogenaza.data.datasources.FakeVaccinationSource;
+import org.dehydrogenaza.data.datasources.FreeVaccinationSource;
+import org.dehydrogenaza.data.datasources.IVaccineSource;
 import org.dehydrogenaza.data.utils.*;
 import org.teavm.flavour.templates.BindTemplate;
 import org.teavm.flavour.templates.Templates;
@@ -67,11 +69,12 @@ public class Client extends ApplicationTemplate {
 
     public List<VaccineType> getVaccines() {
         //TODO: This should probably be taken from the SOURCE instead (the FORM takes it from there anyway)
-        return form.getVaccines();
+        //return form.getVaccines();
+        return dataProvider.getVaccines();
     }
 
     public List<VaccinationScheme> getSchemes() {
-        return form.getSchemes();
+        return dataProvider.getSchemes();
     }
 
     public DataProvider getDataProvider() {
@@ -203,6 +206,18 @@ public class Client extends ApplicationTemplate {
     }
 
     public void setChosenScheme(String schemeID) {
-        form.setChosenScheme(schemeID);
+        IVaccineSource newSchemeSource;
+        switch (schemeID) {
+            case "0":
+                newSchemeSource = new FakeVaccinationSource();
+                break;
+            case "1":
+                newSchemeSource = new FreeVaccinationSource();
+                break;
+            default:
+                newSchemeSource = new FreeVaccinationSource();
+        }
+
+        dataProvider.changeChosenVaccinationScheme(newSchemeSource);
     }
 }

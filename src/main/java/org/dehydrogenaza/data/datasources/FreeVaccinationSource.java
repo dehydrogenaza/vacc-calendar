@@ -17,11 +17,16 @@ public class FreeVaccinationSource implements IVaccineSource {
         int[] offset3 = {3, 4, 10, 20};
         int[] offset4 = {10, 365};
 
-        vaccines.add(new VaccineType("AAA", "choroba A", 0, offset1, getDisplayBoxes(), Math.random() > 0.5));
-        vaccines.add(new VaccineType("BBB", "choroba B", 1, offset2, getDisplayBoxes(), Math.random() > 0.5));
-        vaccines.add(new VaccineType("CCC", "choroba C", 2, offset3, getDisplayBoxes(), Math.random() > 0.5));
-        vaccines.add(new VaccineType("DDD", "choroba D", 3, offset4, getDisplayBoxes(), Math.random() > 0.5));
-        vaccines.add(new VaccineType("EEE", "choroba E", 4, offset2, getDisplayBoxes(), Math.random() > 0.5));
+        vaccines.add(new VaccineType("BCG", "Gruźlica", 0, new int[]{0}, getDisplayBoxes(), true));
+        vaccines.add(new VaccineType("HBV", "Wirusowe Zapalenie Wątroby typu B", 1, new int[]{0, 42, 180},
+                getDisplayBoxes(),
+                true));
+
+//        vaccines.add(new VaccineType("AAA", "choroba A", 0, offset1, getDisplayBoxes(), Math.random() > 0.5));
+//        vaccines.add(new VaccineType("BBB", "choroba B", 1, offset2, getDisplayBoxes(), Math.random() > 0.5));
+//        vaccines.add(new VaccineType("CCC", "choroba C", 2, offset3, getDisplayBoxes(), Math.random() > 0.5));
+//        vaccines.add(new VaccineType("DDD", "choroba D", 3, offset4, getDisplayBoxes(), Math.random() > 0.5));
+//        vaccines.add(new VaccineType("EEE", "choroba E", 4, offset2, getDisplayBoxes(), Math.random() > 0.5));
 
         return vaccines;
     }
