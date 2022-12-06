@@ -6,7 +6,7 @@ import org.dehydrogenaza.data.utils.RecommendationTableBox;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FakeVaccinationSource implements IVaccineSource{
+public class FakeVaccinationSource implements IVaccineSource {
 
     @Override
     public List<VaccineType> getVaccines() {
@@ -16,28 +16,72 @@ public class FakeVaccinationSource implements IVaccineSource{
         int[] offset3 = {2, 4, 6, 100, 2000};
         int[] offset4 = {10, 365};
         int[] offset5 = {7};
-        vaccines.add(new VaccineType("rtęć",                  "choroba 0", 0,
-                offset1, getDisplayBoxes(), Math.random() > 0.5));
-        vaccines.add(new VaccineType("autyzm",                "choroba 1", 1,
-                offset2, getDisplayBoxes(), Math.random() > 0.5));
-        vaccines.add(new VaccineType("czip od Billa Gatesa",  "choroba 2", 2,
-                offset3, getDisplayBoxes(), Math.random() > 0.5));
-        vaccines.add(new VaccineType("chip od Sorosa",        "choroba 3", 3,
-                offset4, getDisplayBoxes(), Math.random() > 0.5));
-        vaccines.add(new VaccineType("NOP",                   "choroba 4", 4,
-                offset5, getDisplayBoxes(), Math.random() > 0.5));
-        vaccines.add(new VaccineType("sok z buraka",          "choroba 5", 5,
-                offset1, getDisplayBoxes(), Math.random() > 0.5));
-        vaccines.add(new VaccineType("darwinizm",             "choroba 6", 6,
-                offset2, getDisplayBoxes(), Math.random() > 0.5));
-        vaccines.add(new VaccineType("niebinarność",          "choroba 7", 7,
-                offset3, getDisplayBoxes(), Math.random() > 0.5));
-        vaccines.add(new VaccineType("leworęczność",          "choroba 8", 8,
-                offset4, getDisplayBoxes(), Math.random() > 0.5));
-        vaccines.add(new VaccineType("wiedźmiństwo",          "choroba 9", 9,
-                offset5, getDisplayBoxes(), Math.random() > 0.5));
-        vaccines.add(new VaccineType("piśmienność",           "choroba 10", 10,
-                offset1, getDisplayBoxes(), Math.random() > 0.5));
+        VaccineType test0 = new VaccineType.Builder()
+                .withDisease("choroba 0")
+                .withDateOffsets(offset1)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("rtęć", Math.random() > 0.5);
+        vaccines.add(test0);
+        VaccineType test1 = new VaccineType.Builder()
+                .withDisease("choroba 1")
+                .withDateOffsets(offset2)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("autyzm", Math.random() > 0.5);
+        vaccines.add(test1);
+        VaccineType test2 = new VaccineType.Builder()
+                .withDisease("choroba 2")
+                .withDateOffsets(offset3)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("czip od Billa Gatesa", Math.random() > 0.5);
+        vaccines.add(test2);
+        VaccineType test3 = new VaccineType.Builder()
+                .withDisease("choroba 3")
+                .withDateOffsets(offset4)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("chip od Sorosa", Math.random() > 0.5);
+        vaccines.add(test3);
+        VaccineType test4 = new VaccineType.Builder()
+                .withDisease("choroba 4")
+                .withDateOffsets(offset5)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("NOP", Math.random() > 0.5);
+        vaccines.add(test4);
+        VaccineType test5 = new VaccineType.Builder()
+                .withDisease("choroba 5")
+                .withDateOffsets(offset1)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("sok z buraka", Math.random() > 0.5);
+        vaccines.add(test5);
+        VaccineType test6 = new VaccineType.Builder()
+                .withDisease("choroba 6")
+                .withDateOffsets(offset2)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("darwinizm", Math.random() > 0.5);
+        vaccines.add(test6);
+        VaccineType test7 = new VaccineType.Builder()
+                .withDisease("choroba 7")
+                .withDateOffsets(offset3)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("niebinarność", Math.random() > 0.5);
+        vaccines.add(test7);
+        VaccineType test8 = new VaccineType.Builder()
+                .withDisease("choroba 8")
+                .withDateOffsets(offset4)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("leworęczność", Math.random() > 0.5);
+        vaccines.add(test8);
+        VaccineType test9 = new VaccineType.Builder()
+                .withDisease("choroba 9")
+                .withDateOffsets(offset5)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("wiedźmiństwo", Math.random() > 0.5);
+        vaccines.add(test9);
+        VaccineType test10 = new VaccineType.Builder()
+                .withDisease("choroba 10")
+                .withDateOffsets(offset1)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("piśmienność", Math.random() > 0.5);
+        vaccines.add(test10);
 
         return vaccines;
     }

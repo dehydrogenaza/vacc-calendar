@@ -14,8 +14,8 @@ import java.util.List;
 
 
 /**
- * The <strong>Client</strong> is the primary, and currently the only one of View {@link Templates}.
- * It serves as the main entry point, maintains the app's state and passes data between components.
+ * The <strong>Client</strong> is the primary, and currently the only one of View {@link Templates}. It serves as the
+ * main entry point, maintains the app's state and passes data between components.
  * <p>The HTML template bound to this class, <code>client.html</code>, is inserted directly to <code>index.html</code>
  * into the "application-content" <code>div</code>.</p>
  * <p><strong>Note:</strong> once proper Routing is implemented, the Client class is expected to change
@@ -85,12 +85,12 @@ public class Client extends ApplicationTemplate {
         return form;
     }
 
-//  TODO: Remove test utility
+    //  TODO: Remove test utility
     public String getTestLogger() {
         return testLogger;
     }
 
-//  TODO: Remove test utility
+    //  TODO: Remove test utility
     public void setTestLogger(String testLogger) {
         Client.testLogger = testLogger;
     }
@@ -102,8 +102,8 @@ public class Client extends ApplicationTemplate {
 
     /**
      * Finalizes initial user input in the main {@link Form}, queries its validity, and sets the application's state
-     * accordingly. If everything is OK, the state should become {@link DisplayState#CALENDAR} and the
-     * {@link #calendar} field will be set to a new {@link VaccinationCalendar} instance.
+     * accordingly. If everything is OK, the state should become {@link DisplayState#CALENDAR} and the {@link #calendar}
+     * field will be set to a new {@link VaccinationCalendar} instance.
      */
     public void submit() {
         displayState = form.submit();
@@ -125,8 +125,8 @@ public class Client extends ApplicationTemplate {
 
     /**
      * Submits the user's changes made to a single, scheduled {@link ScheduleForDay}.
-     * @param   date
-     *          The scheduled date that was changed.
+     *
+     * @param date The scheduled date that was changed.
      */
     public void confirmCalendarChange(ScheduleForDay date) {
         if (date.getDate().equals(date.getTempDate())) {
@@ -156,13 +156,14 @@ public class Client extends ApplicationTemplate {
 
 
 //    TODO: Create an actual implementation + remove test util
+
     /**
      * <strong>MOCK IMPLEMENTATION</strong>
      * <p>Replaces a {@link ScheduleForDay} with a new one (which should be probably passed as parameter, but
      * currently isn't). This <strong>mutates</strong> the contents of {@link #calendar}.</p>
-     * @param   date
-     *          The date to be replaced (representing a unique calendar date and every vaccination scheduled for that
-     *          date).
+     *
+     * @param date The date to be replaced (representing a unique calendar date and every vaccination scheduled for that
+     *             date).
      */
     public void changeDate(ScheduleForDay date) {
         calendar.changeDate(date);
@@ -171,6 +172,7 @@ public class Client extends ApplicationTemplate {
 
 
 //    TODO: Create an actual implementation (maybe) + remove test util
+
     /**
      * <strong>MOCK IMPLEMENTATION</strong>
      * <p>Appends a new, FAKE {@link ScheduleForDay} directly to the list in {@link #calendar}. Useful for
@@ -179,7 +181,7 @@ public class Client extends ApplicationTemplate {
      * probably be implemented in the {@link VaccinationCalendar}</p> class instead, and called from here.
      */
     public void addDate() {
-        List<VaccineType> mockTypes = new ArrayList<>(form.getVaccines().subList(6,10));
+        List<VaccineType> mockTypes = new ArrayList<>(form.getVaccines().subList(6, 10));
         List<Dose> mockDoses = new ArrayList<>();
         for (VaccineType type : mockTypes) {
             mockDoses.add(new Dose(type, new TinyDate("3000-06-05")));
@@ -189,20 +191,29 @@ public class Client extends ApplicationTemplate {
 
 
 //    TODO: Create an actual implementation (maybe) + remove test util
+
     /**
      * <strong>MOCK IMPLEMENTATION</strong>
      * <p>Adds a single FAKE {@link VaccineType} "dose" to the specified schedule (position in the {@link #calendar}.
      * Useful for testing.</p>
      * <p>If this functionality is actually desired in the release version (which is somewhat likely), it should
      * probably be implemented in the {@link VaccinationCalendar}</p> class instead, and called from here.
-     * @param   index
-     *          position in the list of unique calendar dates, taken from the calling HTML component.
+     *
+     * @param index position in the list of unique calendar dates, taken from the calling HTML component.
      */
     public void addVaccine(int index) {
+//        calendar.get().get(index).addDose(new Dose(
+//                new VaccineType("dodano", "choroba", 1000, new int[]{0}, new ArrayList<>(), true),
+//                new TinyDate(1905, 10, 10)));
+        VaccineType test = new VaccineType.Builder()
+                .withDisease("choroba")
+                .withDateOffsets(0)
+                .withDisplayBoxes(new ArrayList<>())
+                .create("dodano", true);
         calendar.get().get(index).addDose(new Dose(
-                new VaccineType("dodano", "choroba", 1000, new int[]{0}, new ArrayList<>(), true),
+                test,
                 new TinyDate(1905, 10, 10)));
-        testLogger="" + calendar.get().get(index).getDoses();
+        testLogger = "" + calendar.get().get(index).getDoses();
     }
 
     public void setChosenScheme(String schemeID) {

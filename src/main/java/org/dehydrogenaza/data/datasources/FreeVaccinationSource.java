@@ -17,10 +17,18 @@ public class FreeVaccinationSource implements IVaccineSource {
         int[] offset3 = {3, 4, 10, 20};
         int[] offset4 = {10, 365};
 
-        vaccines.add(new VaccineType("BCG", "Gruźlica", 0, new int[]{0}, getDisplayBoxes(), true));
-        vaccines.add(new VaccineType("HBV", "Wirusowe Zapalenie Wątroby typu B", 1, new int[]{0, 42, 180},
-                getDisplayBoxes(),
-                true));
+        VaccineType bcg = new VaccineType.Builder()
+                .withDisease("Gruźlica")
+                .withDateOffsets(0)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("BCG", true);
+        VaccineType hbv = new VaccineType.Builder()
+                .withDisease("Wirusowe Zapalenie Wątroby typu B")
+                .withDateOffsets(0, 42, 180)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("BCG", true);
+        vaccines.add(bcg);
+        vaccines.add(hbv);
 
 //        vaccines.add(new VaccineType("AAA", "choroba A", 0, offset1, getDisplayBoxes(), Math.random() > 0.5));
 //        vaccines.add(new VaccineType("BBB", "choroba B", 1, offset2, getDisplayBoxes(), Math.random() > 0.5));

@@ -2,6 +2,7 @@ package org.dehydrogenaza.data;
 
 import org.dehydrogenaza.data.utils.RecommendationTableBox;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,24 +41,52 @@ public class VaccineType {
 
 
     /**
-     * Constructs a VaccineType given its full data.
-     * @param   name
-     *          name of the product.
-     * @param   id
-     *          unique numeric identifier.
-     * @param   dateOffsets
-     *          offsets of individual doses, in days.
-     * @param   isSelected
-     *          initial selection status.
+     * Constructs a VaccineType based on Builder data.
+     * @param   builder
+     *          the internal Builder instance that takes care of this object's initialization.
      */
-    public VaccineType(String name, String disease, int id, int[] dateOffsets, List<RecommendationTableBox> displayBoxes,
-                       boolean isSelected) {
-        this.name = name;
-        this.disease = disease;
-        this.id = id;
-        this.dateOffsets = dateOffsets;
-        this.displayBoxes = displayBoxes;
-        this.selected = isSelected;
+    private VaccineType(Builder builder) {
+        this.name = builder.name;
+        this.disease = builder.disease;
+        this.id = builder.id;
+        this.dateOffsets = builder.dateOffsets;
+        this.displayBoxes = builder.displayBoxes;
+        this.selected = builder.selected;
+    }
+
+    public static class Builder {
+        private static int currentID = 0;
+        private String name;
+        private String disease;
+        private int id;
+        private int[] dateOffsets;
+        private List<RecommendationTableBox> displayBoxes;
+        private boolean selected;
+
+        public Builder withDisease(String diseaseName) {
+            this.disease = diseaseName;
+            return this;
+        }
+
+        public Builder withDateOffsets(int... dateOffsets) {
+            this.dateOffsets = dateOffsets;
+            return this;
+        }
+
+        public Builder withDisplayBoxes(List<RecommendationTableBox> displayBoxes) {
+            this.displayBoxes = displayBoxes;
+            return this;
+        }
+
+        public VaccineType create(String name, boolean selected) {
+            this.name = name;
+            if (this.disease == null) this.disease = "";
+            this.id = currentID++;
+            if (this.dateOffsets == null) this.dateOffsets = new int[]{0};
+            if (this.displayBoxes == null) this.displayBoxes = new ArrayList<>();
+            this.selected = selected;
+            return new VaccineType(this);
+        }
     }
 
     public String getName() {
