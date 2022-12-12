@@ -12,11 +12,6 @@ public class FreeVaccinationSource implements IVaccineSource {
     public List<VaccineType> getVaccines() {
         List<VaccineType> vaccines = new ArrayList<>();
 
-        int[] offset1 = {0, 365, 5000};
-        int[] offset2 = {3, 17, 61};
-        int[] offset3 = {3, 4, 10, 20};
-        int[] offset4 = {10, 365};
-
         VaccineType bcg = new VaccineType.Builder()
                 .withDisease("Gruźlica")
                 .withDateOffsets(0)
@@ -27,14 +22,35 @@ public class FreeVaccinationSource implements IVaccineSource {
                 .withDateOffsets(0, 42, 180)
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("BCG", true);
+        VaccineType dtpw = new VaccineType.Builder()
+                .withDisease("Błonica, tężec, krztusiec (szczepionka całokomórkowa)")
+                .withDateOffsets(42, 102, 162, 480)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("DTPw", true);
+        VaccineType dtap = new VaccineType.Builder()
+                .withDisease("Błonica, tężec, krztusiec (szczepionka bezkomórkowa)")
+                .withDateOffsets(2190)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("DTaP", true);
+        VaccineType dtpa = new VaccineType.Builder()
+                .withDisease("Błonica, tężec, krztusiec (szczepionka zawierająca toksoid tężcowy, zmniejszoną dawkę " +
+                        "toksoidu błoniczego i bezkomórkowe komponenty krztuśca)")
+                .withDateOffsets(5110)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("dTpa", true);
+        VaccineType td = new VaccineType.Builder()
+                .withDisease("Błonica, tężec")
+                .withDateOffsets(6935)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("Td", true);
+
         vaccines.add(bcg);
         vaccines.add(hbv);
+        vaccines.add(dtpw);
+        vaccines.add(dtap);
+        vaccines.add(dtpa);
+        vaccines.add(td);
 
-//        vaccines.add(new VaccineType("AAA", "choroba A", 0, offset1, getDisplayBoxes(), Math.random() > 0.5));
-//        vaccines.add(new VaccineType("BBB", "choroba B", 1, offset2, getDisplayBoxes(), Math.random() > 0.5));
-//        vaccines.add(new VaccineType("CCC", "choroba C", 2, offset3, getDisplayBoxes(), Math.random() > 0.5));
-//        vaccines.add(new VaccineType("DDD", "choroba D", 3, offset4, getDisplayBoxes(), Math.random() > 0.5));
-//        vaccines.add(new VaccineType("EEE", "choroba E", 4, offset2, getDisplayBoxes(), Math.random() > 0.5));
 
         return vaccines;
     }
