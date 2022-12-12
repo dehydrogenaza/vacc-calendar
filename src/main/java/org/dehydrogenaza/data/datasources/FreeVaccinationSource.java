@@ -19,38 +19,71 @@ public class FreeVaccinationSource implements IVaccineSource {
                 .create("BCG", true);
         VaccineType hbv = new VaccineType.Builder()
                 .withDisease("Wirusowe Zapalenie Wątroby typu B")
-                .withDateOffsets(0, 42, 180)
+                .withDateOffsets(0, 42, 210)
                 .withDisplayBoxes(getDisplayBoxes())
-                .create("BCG", true);
-        VaccineType dtpw = new VaccineType.Builder()
-                .withDisease("Błonica, tężec, krztusiec (szczepionka całokomórkowa)")
+                .create("HBV", true);
+        VaccineType dtp = new VaccineType.Builder()
+                .withDisease("Błonica, tężec, krztusiec")
+                .withDateOffsets(42, 102, 162, 480, 2190, 5110, 6935)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("DTP", true);
+//        VaccineType dtap = new VaccineType.Builder()
+//                .withDisease("Błonica, tężec, krztusiec (szczepionka bezkomórkowa)")
+//                .withDateOffsets(2190)
+//                .withDisplayBoxes(getDisplayBoxes())
+//                .create("DTaP", true);
+//        VaccineType dtpa = new VaccineType.Builder()
+//                .withDisease("Błonica, tężec, krztusiec (szczepionka zawierająca toksoid tężcowy, zmniejszoną dawkę " +
+//                        "toksoidu błoniczego i bezkomórkowe komponenty krztuśca)")
+//                .withDateOffsets(5110)
+//                .withDisplayBoxes(getDisplayBoxes())
+//                .create("dTpa", true);
+//        VaccineType td = new VaccineType.Builder()
+//                .withDisease("Błonica, tężec")
+//                .withDateOffsets(6935)
+//                .withDisplayBoxes(getDisplayBoxes())
+//                .create("Td", true);
+        VaccineType ipv = new VaccineType.Builder()
+                .withDisease("Polio (Heinego-Medina)")
+                .withDateOffsets(102, 162, 480, 2190)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("IPV", true);
+        VaccineType hib = new VaccineType.Builder()
+                .withDisease("Haemophilus influenzae typu B")
                 .withDateOffsets(42, 102, 162, 480)
                 .withDisplayBoxes(getDisplayBoxes())
-                .create("DTPw", true);
-        VaccineType dtap = new VaccineType.Builder()
-                .withDisease("Błonica, tężec, krztusiec (szczepionka bezkomórkowa)")
-                .withDateOffsets(2190)
+                .create("Hib", true);
+        // TODO: only children born after X year
+        VaccineType pcv = new VaccineType.Builder()
+                .withDisease("Pneumokoki")
+                .withDateOffsets(42, 102, 390)
                 .withDisplayBoxes(getDisplayBoxes())
-                .create("DTaP", true);
-        VaccineType dtpa = new VaccineType.Builder()
-                .withDisease("Błonica, tężec, krztusiec (szczepionka zawierająca toksoid tężcowy, zmniejszoną dawkę " +
-                        "toksoidu błoniczego i bezkomórkowe komponenty krztuśca)")
-                .withDateOffsets(5110)
+                .create("PCV", true);
+        // TODO: only children born after X year
+        // TODO: exists in either 2 or 3 dose variants
+        VaccineType rv = new VaccineType.Builder()
+                .withDisease("Rotawirusy")
+                .withDateOffsets(42, 102, 162)
                 .withDisplayBoxes(getDisplayBoxes())
-                .create("dTpa", true);
-        VaccineType td = new VaccineType.Builder()
-                .withDisease("Błonica, tężec")
-                .withDateOffsets(6935)
+                .create("RV", true);
+        // TODO: I found data for either 2 or 3 doses but they are inconsistent, what's actually recommended?
+        VaccineType mmr = new VaccineType.Builder()
+                .withDisease("Odra, świnka, różyczka")
+                .withDateOffsets(390, 2190, 3650)
                 .withDisplayBoxes(getDisplayBoxes())
-                .create("Td", true);
+                .create("MMR", true);
 
         vaccines.add(bcg);
         vaccines.add(hbv);
-        vaccines.add(dtpw);
-        vaccines.add(dtap);
-        vaccines.add(dtpa);
-        vaccines.add(td);
-
+        vaccines.add(dtp);
+//        vaccines.add(dtap);
+//        vaccines.add(dtpa);
+//        vaccines.add(td);
+        vaccines.add(ipv);
+        vaccines.add(hib);
+        vaccines.add(pcv);
+        vaccines.add(rv);
+        vaccines.add(mmr);
 
         return vaccines;
     }
