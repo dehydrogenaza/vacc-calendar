@@ -191,51 +191,108 @@
             <h4 class="display-6 mb-3">4. Terminy zalecane</h4>
             <!--            style="table-layout: fixed;"-->
             <table class="table table-borderless text-center">
-                <thead class="table-dark">
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col">24 h</th>
-                    <th scope="col">6+ tyg.</th>
-                    <th scope="col">3-4 mies.</th>
-                    <th scope="col">5-6 mies.</th>
-                    <th scope="col">7 mies.</th>
-                    <th scope="col">13-15 mies.</th>
-                    <th scope="col">16-18 mies.</th>
-                    <th scope="col">6 lat</th>
-                    <th scope="col">12-13 lat</th>
-                    <th scope="col">14 lat</th>
-                    <th scope="col">19 lat</th>
+                <tr class="text-bg-dark">
+                    <th class=""></th>
+                    <th>24 h</th>
+                    <th>1<br>mies.</th>
+                    <th>2<br>mies.</th>
+                    <th>3<br>mies.</th>
+                    <th>4<br>mies.</th>
+                    <th>5<br>mies.</th>
+                    <th>6<br>mies.</th>
+                    <th>7<br>mies.</th>
+                    <th>8<br>mies.</th>
                 </tr>
-                </thead>
-                <tbody>
-                <std:foreach var="vax" in="vaccines">
-                    <tr>
-                        <td>
-                            <html:text value="vax.disease"/>
-                        </td>
-                        <std:if condition="vax.selected">
-                            <std:foreach var="box" in="vax.boxes">
-                                <td attr:colspan="box.span">
-                                    <std:if condition="box.filled">
-                                        <div attr:class="'rounded-4 p-1 ' + box.color">
-                                            <html:text value="vax.getVariant(0)"/>
-<!--                                            <html:text value="vax.name"/>-->
-                                        </div>
-                                    </std:if>
-                                </td>
-                            </std:foreach>
-                        </std:if>
-                        <std:if condition="not vax.selected">
-                            <td colspan="11">
-                                <div class="rounded-4 p-1 text-bg-secondary">
-                                    <em>(nie wybrano szczepienia)</em>
-                                </div>
-                            </td>
-                        </std:if>
-                    </tr>
+                <tr>
+                    <td>Bardzo długa nazwa choroby</td>
+                    <td>aaa</td>
+                    <td>bbb</td>
+                    <td class="text-bg-success rounded-4 p-1">ccc</td>
+                    <td>ddd</td>
+                    <td class="text-bg-warning">eee</td>
+                    <td>fff</td>
+                    <td>ggg</td>
+                    <td>hhh</td>
+                    <td>iii</td>
+                </tr>
+                <tr>
+                    <td>Test 2</td>
+                    <td>aaa</td>
+                    <td>bbb</td>
+                    <td class="text-bg-success rounded-4 p-1">ccc</td>
+                    <td>ddd</td>
+                    <td class="text-bg-warning">eee</td>
+                    <td>fff</td>
+                    <td>ggg</td>
+                    <td>hhh</td>
+                    <td>iii</td>
+                </tr>
+                <tr class="text-bg-dark">
+                    <th></th>
+                    <th>13-15<br>mies.</th>
+                    <th>16-18<br>mies.</th>
+                    <th colspan="2">6<br>lat</th>
+                    <th colspan="2">10<br>lat</th>
+                    <th colspan="2">14<br>lat</th>
+                    <th>19<br>lat</th>
+                </tr>
+                <tr>
+                    <td>Test 3</td>
+                    <td>aaa</td>
+                    <td>bbb</td>
+                    <td class="text-bg-success rounded-4 p-1">ccc</td>
+                    <td>ddd</td>
+                    <td class="text-bg-warning">eee</td>
+                    <td>fff</td>
+                    <td>ggg</td>
+                    <td>hhh</td>
+                    <td>iii</td>
+                </tr>
+<!--                <thead class="table-dark">-->
+<!--                <tr>-->
+<!--                    <th scope="col"></th>-->
+<!--                    <th scope="col">24 h</th>-->
+<!--                    <th scope="col">6+ tyg.</th>-->
+<!--                    <th scope="col">3-4 mies.</th>-->
+<!--                    <th scope="col">5-6 mies.</th>-->
+<!--                    <th scope="col">7 mies.</th>-->
+<!--                    <th scope="col">13-15 mies.</th>-->
+<!--                    <th scope="col">16-18 mies.</th>-->
+<!--                    <th scope="col">6 lat</th>-->
+<!--                    <th scope="col">12-13 lat</th>-->
+<!--                    <th scope="col">14 lat</th>-->
+<!--                    <th scope="col">19 lat</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                <std:foreach var="vax" in="vaccines">-->
+<!--                    <tr>-->
+<!--                        <td>-->
+<!--                            <html:text value="vax.disease"/>-->
+<!--                        </td>-->
+<!--                        <std:if condition="vax.selected">-->
+<!--                            <std:foreach var="box" in="vax.boxes">-->
+<!--                                <td attr:colspan="box.span">-->
+<!--                                    <std:if condition="box.filled">-->
+<!--                                        <div attr:class="'rounded-4 p-1 ' + box.color">-->
+<!--                                            <html:text value="vax.getVariant(0)"/>-->
+<!--&lt;!&ndash;                                            <html:text value="vax.name"/>&ndash;&gt;-->
+<!--                                        </div>-->
+<!--                                    </std:if>-->
+<!--                                </td>-->
+<!--                            </std:foreach>-->
+<!--                        </std:if>-->
+<!--                        <std:if condition="not vax.selected">-->
+<!--                            <td colspan="11">-->
+<!--                                <div class="rounded-4 p-1 text-bg-secondary">-->
+<!--                                    <em>(nie wybrano szczepienia)</em>-->
+<!--                                </div>-->
+<!--                            </td>-->
+<!--                        </std:if>-->
+<!--                    </tr>-->
 
-                </std:foreach>
-                </tbody>
+<!--                </std:foreach>-->
+<!--                </tbody>-->
             </table>
         </section>
     </div>

@@ -24,7 +24,6 @@ public class VaccinationCalendar {
      */
     private final List<VaccineType> vaccines;
 
-    // TODO: try to reimplement using TreeSets and see if it costs a lot in terms of JS
     /**
      * The main point of this class. A sorted list of {@link ScheduleForDay}s.
      */
@@ -65,7 +64,7 @@ public class VaccinationCalendar {
     }
 
 
-//    TODO: Redo the whole thing.
+    // TODO: Remove test utility.
     /**
      * <strong>MOCK IMPLEMENTATION</strong>, changes the given date to a preset one. Just for testing.
      * @param   oldDate
@@ -238,44 +237,15 @@ public class VaccinationCalendar {
                     //therefore, we add this "dose" to the list instead of duplicating the date
                     List<Dose> vaccinesAtDate = mapOfAllVaccinationsOnGivenDates.get(dateOfVaccination);
                     vaccinesAtDate.add(new Dose(type, new TinyDate(dateOfVaccination), variantName));
-
                 } else {
                     //nothing is scheduled for this date, yet
                     //create a new list and add this "dose" as its first item
                     List<Dose> vaccinesAtDate = new ArrayList<>();
                     vaccinesAtDate.add(new Dose(type, new TinyDate(dateOfVaccination), variantName));
                     mapOfAllVaccinationsOnGivenDates.put(dateOfVaccination, vaccinesAtDate);
-
                 }
             }
         }
-
-//        for (VaccineType type : vaccines) {
-//            if (!type.isSelected()) {
-//                //skip if this vaccine is not selected
-//                continue;
-//            }
-//            //each vaccine can have multiple doses, that are OFFSET by a certain number of days
-//            for (int offsetInDays : type.getDateOffsets()) {
-//                //when the dose should be administered
-//                String dateOfVaccination = startDate.addDays(offsetInDays).toString();
-//
-//                if (mapOfAllVaccinationsOnGivenDates.containsKey(dateOfVaccination)) {
-//                    //something is already scheduled for this date
-//                    //therefore, we add this "dose" to the list instead of duplicating the date
-//                    List<Dose> vaccinesAtDate = mapOfAllVaccinationsOnGivenDates.get(dateOfVaccination);
-//                    vaccinesAtDate.add(new Dose(type, new TinyDate(dateOfVaccination)));
-//
-//                } else {
-//                    //nothing is scheduled for this date, yet
-//                    //create a new list and add this "dose" as its first item
-//                    List<Dose> vaccinesAtDate = new ArrayList<>();
-//                    vaccinesAtDate.add(new Dose(type, new TinyDate(dateOfVaccination)));
-//                    mapOfAllVaccinationsOnGivenDates.put(dateOfVaccination, vaccinesAtDate);
-//
-//                }
-//            }
-//        }
 
 //      TODO: This could be a separate method (maybe, could be overthinking)
         //translate each key-value pair of our HashMap to a ScheduleForDay instance

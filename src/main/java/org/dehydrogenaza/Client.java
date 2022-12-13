@@ -1,9 +1,7 @@
 package org.dehydrogenaza;
 
 import org.dehydrogenaza.data.*;
-import org.dehydrogenaza.data.datasources.FakeVaccinationSource;
-import org.dehydrogenaza.data.datasources.FreeVaccinationSource;
-import org.dehydrogenaza.data.datasources.IVaccineSource;
+import org.dehydrogenaza.data.datasources.*;
 import org.dehydrogenaza.data.utils.*;
 import org.teavm.flavour.templates.BindTemplate;
 import org.teavm.flavour.templates.Templates;
@@ -68,8 +66,6 @@ public class Client extends ApplicationTemplate {
     }
 
     public List<VaccineType> getVaccines() {
-        //TODO: This should probably be taken from the SOURCE instead (the FORM takes it from there anyway)
-        //return form.getVaccines();
         return dataProvider.getVaccines();
     }
 
