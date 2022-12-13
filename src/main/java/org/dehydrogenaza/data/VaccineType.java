@@ -31,6 +31,8 @@ public class VaccineType {
      */
     private final int[] dateOffsets;
 
+    private final String[] variantNames;
+
     private final List<RecommendationTableBox> displayBoxes;
 
     /**
@@ -51,6 +53,7 @@ public class VaccineType {
         this.id = builder.id;
         this.dateOffsets = builder.dateOffsets;
         this.displayBoxes = builder.displayBoxes;
+        this.variantNames = builder.variantNames;
         this.selected = builder.selected;
     }
 
@@ -60,6 +63,7 @@ public class VaccineType {
         private String disease;
         private int id;
         private int[] dateOffsets;
+        private String[] variantNames;
         private List<RecommendationTableBox> displayBoxes;
         private boolean selected;
 
@@ -70,6 +74,11 @@ public class VaccineType {
 
         public Builder withDateOffsets(int... dateOffsets) {
             this.dateOffsets = dateOffsets;
+            return this;
+        }
+
+        public Builder withVariantNames(String... variantNames) {
+            this.variantNames = variantNames;
             return this;
         }
 
@@ -103,6 +112,11 @@ public class VaccineType {
 
     public int[] getDateOffsets() {
         return dateOffsets;
+    }
+
+    public String getVariant(int index) {
+        if (variantNames == null) return name;
+        return variantNames[index];
     }
 
     public boolean isSelected() {

@@ -25,24 +25,9 @@ public class FreeVaccinationSource implements IVaccineSource {
         VaccineType dtp = new VaccineType.Builder()
                 .withDisease("Błonica, tężec, krztusiec")
                 .withDateOffsets(42, 102, 162, 480, 2190, 5110, 6935)
+                .withVariantNames("DTPw", "DTPw", "DTPw", "DTPw", "DTaP", "dTpa", "Td")
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("DTP", true);
-//        VaccineType dtap = new VaccineType.Builder()
-//                .withDisease("Błonica, tężec, krztusiec (szczepionka bezkomórkowa)")
-//                .withDateOffsets(2190)
-//                .withDisplayBoxes(getDisplayBoxes())
-//                .create("DTaP", true);
-//        VaccineType dtpa = new VaccineType.Builder()
-//                .withDisease("Błonica, tężec, krztusiec (szczepionka zawierająca toksoid tężcowy, zmniejszoną dawkę " +
-//                        "toksoidu błoniczego i bezkomórkowe komponenty krztuśca)")
-//                .withDateOffsets(5110)
-//                .withDisplayBoxes(getDisplayBoxes())
-//                .create("dTpa", true);
-//        VaccineType td = new VaccineType.Builder()
-//                .withDisease("Błonica, tężec")
-//                .withDateOffsets(6935)
-//                .withDisplayBoxes(getDisplayBoxes())
-//                .create("Td", true);
         VaccineType ipv = new VaccineType.Builder()
                 .withDisease("Polio (Heinego-Medina)")
                 .withDateOffsets(102, 162, 480, 2190)
@@ -76,9 +61,6 @@ public class FreeVaccinationSource implements IVaccineSource {
         vaccines.add(bcg);
         vaccines.add(hbv);
         vaccines.add(dtp);
-//        vaccines.add(dtap);
-//        vaccines.add(dtpa);
-//        vaccines.add(td);
         vaccines.add(ipv);
         vaccines.add(hib);
         vaccines.add(pcv);

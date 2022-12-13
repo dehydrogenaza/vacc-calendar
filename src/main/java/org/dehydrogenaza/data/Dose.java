@@ -8,11 +8,22 @@ public class Dose {
     private final VaccineType type;
     private final TinyDate date;
 
+    private final String variantName;
+
     private String tempDate;
 
     public Dose(VaccineType type, TinyDate date) {
+//        this.type = type;
+//        this.date = date;
+//
+//        this.tempDate = date.toString();
+        this(type, date, type.getName());
+    }
+
+    public Dose(VaccineType type, TinyDate date, String variantName) {
         this.type = type;
         this.date = date;
+        this.variantName = variantName;
 
         this.tempDate = date.toString();
     }
@@ -27,6 +38,10 @@ public class Dose {
 
     public TinyDate getDate() {
         return date;
+    }
+
+    public String getVariantName() {
+        return variantName;
     }
 
     public String getTempDate() {

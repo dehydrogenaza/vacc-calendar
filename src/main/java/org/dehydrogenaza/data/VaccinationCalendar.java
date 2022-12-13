@@ -226,7 +226,10 @@ public class VaccinationCalendar {
                 continue;
             }
             //each vaccine can have multiple doses, that are OFFSET by a certain number of days
-            for (int offsetInDays : type.getDateOffsets()) {
+            int[] dateOffsets = type.getDateOffsets();
+            for (int i = 0; i < dateOffsets.length; i++) {
+                int offsetInDays = dateOffsets[i];
+                String variantName = type.getVariant(i);
                 //when the dose should be administered
                 String dateOfVaccination = startDate.addDays(offsetInDays).toString();
 
@@ -234,18 +237,45 @@ public class VaccinationCalendar {
                     //something is already scheduled for this date
                     //therefore, we add this "dose" to the list instead of duplicating the date
                     List<Dose> vaccinesAtDate = mapOfAllVaccinationsOnGivenDates.get(dateOfVaccination);
-                    vaccinesAtDate.add(new Dose(type, new TinyDate(dateOfVaccination)));
+                    vaccinesAtDate.add(new Dose(type, new TinyDate(dateOfVaccination), variantName));
 
                 } else {
                     //nothing is scheduled for this date, yet
                     //create a new list and add this "dose" as its first item
                     List<Dose> vaccinesAtDate = new ArrayList<>();
-                    vaccinesAtDate.add(new Dose(type, new TinyDate(dateOfVaccination)));
+                    vaccinesAtDate.add(new Dose(type, new TinyDate(dateOfVaccination), variantName));
                     mapOfAllVaccinationsOnGivenDates.put(dateOfVaccination, vaccinesAtDate);
 
                 }
             }
         }
+
+//        for (VaccineType type : vaccines) {
+//            if (!type.isSelected()) {
+//                //skip if this vaccine is not selected
+//                continue;
+//            }
+//            //each vaccine can have multiple doses, that are OFFSET by a certain number of days
+//            for (int offsetInDays : type.getDateOffsets()) {
+//                //when the dose should be administered
+//                String dateOfVaccination = startDate.addDays(offsetInDays).toString();
+//
+//                if (mapOfAllVaccinationsOnGivenDates.containsKey(dateOfVaccination)) {
+//                    //something is already scheduled for this date
+//                    //therefore, we add this "dose" to the list instead of duplicating the date
+//                    List<Dose> vaccinesAtDate = mapOfAllVaccinationsOnGivenDates.get(dateOfVaccination);
+//                    vaccinesAtDate.add(new Dose(type, new TinyDate(dateOfVaccination)));
+//
+//                } else {
+//                    //nothing is scheduled for this date, yet
+//                    //create a new list and add this "dose" as its first item
+//                    List<Dose> vaccinesAtDate = new ArrayList<>();
+//                    vaccinesAtDate.add(new Dose(type, new TinyDate(dateOfVaccination)));
+//                    mapOfAllVaccinationsOnGivenDates.put(dateOfVaccination, vaccinesAtDate);
+//
+//                }
+//            }
+//        }
 
 //      TODO: This could be a separate method (maybe, could be overthinking)
         //translate each key-value pair of our HashMap to a ScheduleForDay instance
