@@ -3,7 +3,10 @@ package org.dehydrogenaza.data;
 import org.dehydrogenaza.data.utils.RecommendationTableBox;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * A <strong>VaccineType</strong> represents all the data associated with a single type of vaccination, such as the name
@@ -29,11 +32,13 @@ public class VaccineType {
      * the start point (which is currently equal to the date of the first vaccination).
      * <p>An offset of "0" means that the given dose should be administered right at the start point.</p>
      */
-    private final int[] dateOffsets;
+    private int[] dateOffsets;
 
-    private final String[] variantNames;
+    private final String[] variantNames; //can be null
 
     private final List<RecommendationTableBox> displayBoxes;
+
+    private final Map<VaccineType, Consumer<VaccineType>> vaccineRelationships;
 
     /**
      * Is this vaccination selected by the user. <strong>This value is bound bidirectionally with an HTML element
@@ -54,6 +59,7 @@ public class VaccineType {
         this.dateOffsets = builder.dateOffsets;
         this.displayBoxes = builder.displayBoxes;
         this.variantNames = builder.variantNames;
+        this.vaccineRelationships = builder.vaccineRelationships;
         this.selected = builder.selected;
     }
 
@@ -65,6 +71,7 @@ public class VaccineType {
         private int[] dateOffsets;
         private String[] variantNames;
         private List<RecommendationTableBox> displayBoxes;
+        private Map<VaccineType, Consumer<VaccineType>> vaccineRelationships;
         private boolean selected;
 
         public Builder withDisease(String diseaseName) {
@@ -93,9 +100,14 @@ public class VaccineType {
             this.id = currentID++;
             if (this.dateOffsets == null) this.dateOffsets = new int[]{0};
             if (this.displayBoxes == null) this.displayBoxes = new ArrayList<>();
+            this.vaccineRelationships = new HashMap<>();
             this.selected = selected;
             return new VaccineType(this);
         }
+    }
+
+    public void addRelationship(VaccineType vax, Consumer<VaccineType> action) {
+        vaccineRelationships.put(vax, action);
     }
 
     public String getName() {
@@ -114,6 +126,10 @@ public class VaccineType {
         return dateOffsets;
     }
 
+    public void setDateOffsets(int... dateOffsets) {
+        this.dateOffsets = dateOffsets;
+    }
+
     public String getVariant(int index) {
         if (variantNames == null) return name;
         return variantNames[index];
@@ -125,6 +141,7 @@ public class VaccineType {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+        applyRelationships();
     }
 
     public List<RecommendationTableBox> getBoxes() {
@@ -133,5 +150,9 @@ public class VaccineType {
 
     public static boolean isSame(VaccineType v1, VaccineType v2) {
         return v1.id == v2.id;
+    }
+
+    private void applyRelationships() {
+        vaccineRelationships.forEach((vax, action) -> action.accept(vax));
     }
 }

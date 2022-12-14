@@ -9,7 +9,9 @@ import java.util.List;
 public class FreeVaccinationSource implements IVaccineSource {
     private static final int WITHIN_24H = 0;
     private static final int VISIT_6_WEEKS = 42;
+    private static final int VISIT_2TO3_MONTHS = 72;
     private static final int VISIT_3TO4_MONTHS = 102;
+    private static final int VISIT_4TO5_MONTHS = 132;
     private static final int VISIT_5TO6_MONTHS = 162;
     private static final int VISIT_13_MONTHS = 390;
     private static final int VISIT_16_MONTHS = 480;
@@ -68,6 +70,28 @@ public class FreeVaccinationSource implements IVaccineSource {
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("MMR", true);
         //OPT-IN
+        // TODO: not recommended to do menB + menC/ACWY simultaneously, add ~2 weeks gap (add to other schedules)
+        int[] menBOffsetsNormal = {VISIT_2TO3_MONTHS, VISIT_3TO4_MONTHS, VISIT_4TO5_MONTHS, VISIT_13_MONTHS};
+        int[] menBOffsetsDelayed = {VISIT_3TO4_MONTHS, VISIT_4TO5_MONTHS, VISIT_5TO6_MONTHS, VISIT_13_MONTHS};
+        VaccineType menb = new VaccineType.Builder()
+                .withDisease("Meningokoki grupy B")
+                .withDateOffsets(menBOffsetsNormal)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("MenB", false);
+        VaccineType menc = new VaccineType.Builder()
+                .withDisease("Meningokoki grupy C")
+                .withDateOffsets(VISIT_2TO3_MONTHS, VISIT_4TO5_MONTHS, VISIT_13_MONTHS)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("MenC", false);
+        menc.addRelationship(menb, vaxMenB -> {
+            if (menc.isSelected()) vaxMenB.setDateOffsets(menBOffsetsDelayed);
+            else vaxMenB.setDateOffsets(menBOffsetsNormal);
+        });
+        VaccineType menacwy = new VaccineType.Builder()
+                .withDisease("Meningokoki grup A, C, W, Y")
+                .withDateOffsets(VISIT_2TO3_MONTHS, VISIT_4TO5_MONTHS, VISIT_13_MONTHS)
+                .withDisplayBoxes(getDisplayBoxes())
+                .create("MenACWY", false);
 
         vaccines.add(bcg);
         vaccines.add(hbv);
@@ -77,6 +101,9 @@ public class FreeVaccinationSource implements IVaccineSource {
         vaccines.add(pcv);
         vaccines.add(rv);
         vaccines.add(mmr);
+        vaccines.add(menb);
+        vaccines.add(menc);
+        vaccines.add(menacwy);
 
         return vaccines;
     }
