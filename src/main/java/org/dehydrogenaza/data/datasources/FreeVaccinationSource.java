@@ -7,56 +7,67 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FreeVaccinationSource implements IVaccineSource {
+    private static final int WITHIN_24H = 0;
+    private static final int VISIT_6_WEEKS = 42;
+    private static final int VISIT_3TO4_MONTHS = 102;
+    private static final int VISIT_5TO6_MONTHS = 162;
+    private static final int VISIT_13_MONTHS = 390;
+    private static final int VISIT_16_MONTHS = 480;
+    private static final int VISIT_6_YEARS = 2190;
 
     @Override
     public List<VaccineType> getVaccines() {
         List<VaccineType> vaccines = new ArrayList<>();
 
+        //MANDATORY
         VaccineType bcg = new VaccineType.Builder()
                 .withDisease("Gruźlica")
-                .withDateOffsets(0)
+                .withDateOffsets(WITHIN_24H)
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("BCG", true);
         VaccineType hbv = new VaccineType.Builder()
                 .withDisease("Wirusowe Zapalenie Wątroby typu B")
-                .withDateOffsets(0, 42, 210)
+                .withDateOffsets(WITHIN_24H, VISIT_6_WEEKS, 210)
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("HBV", true);
         VaccineType dtp = new VaccineType.Builder()
                 .withDisease("Błonica, tężec, krztusiec")
-                .withDateOffsets(42, 102, 162, 480, 2190, 5110, 6935)
+                .withDateOffsets(VISIT_6_WEEKS, VISIT_3TO4_MONTHS, VISIT_5TO6_MONTHS,
+                        VISIT_16_MONTHS, VISIT_6_YEARS, 5110, 6935)
                 .withVariantNames("DTPw", "DTPw", "DTPw", "DTPw", "DTaP", "dTpa", "Td")
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("DTP", true);
         VaccineType ipv = new VaccineType.Builder()
                 .withDisease("Polio (Heinego-Medina)")
-                .withDateOffsets(102, 162, 480, 2190)
+                .withDateOffsets(VISIT_3TO4_MONTHS, VISIT_5TO6_MONTHS, VISIT_16_MONTHS, VISIT_6_YEARS)
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("IPV", true);
         VaccineType hib = new VaccineType.Builder()
                 .withDisease("Haemophilus influenzae typu B")
-                .withDateOffsets(42, 102, 162, 480)
+                .withDateOffsets(VISIT_6_WEEKS, VISIT_3TO4_MONTHS, VISIT_5TO6_MONTHS, VISIT_16_MONTHS)
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("Hib", true);
         // TODO: only children born after X year
         VaccineType pcv = new VaccineType.Builder()
                 .withDisease("Pneumokoki")
-                .withDateOffsets(42, 102, 390)
+                .withDateOffsets(VISIT_6_WEEKS, VISIT_3TO4_MONTHS, VISIT_13_MONTHS)
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("PCV", true);
         // TODO: only children born after X year
         // TODO: exists in either 2 or 3 dose variants
         VaccineType rv = new VaccineType.Builder()
                 .withDisease("Rotawirusy")
-                .withDateOffsets(42, 102, 162)
+                .withDateOffsets(VISIT_6_WEEKS, VISIT_3TO4_MONTHS, VISIT_5TO6_MONTHS)
+                .withVariantNames("RV", "RV", "RV3")
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("RV", true);
-        // TODO: I found data for either 2 or 3 doses but they are inconsistent, what's actually recommended?
+        // TODO: 2 doses, 390/2190 for children born >= 2013(?), 390/3650 for children born < 2013
         VaccineType mmr = new VaccineType.Builder()
                 .withDisease("Odra, świnka, różyczka")
-                .withDateOffsets(390, 2190, 3650)
+                .withDateOffsets(VISIT_13_MONTHS, VISIT_6_YEARS)
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("MMR", true);
+        //OPT-IN
 
         vaccines.add(bcg);
         vaccines.add(hbv);

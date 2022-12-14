@@ -1,9 +1,6 @@
 package org.dehydrogenaza.data;
 
 
-import org.dehydrogenaza.data.datasources.FakeVaccinationSource;
-import org.dehydrogenaza.data.datasources.FreeVaccinationSource;
-import org.dehydrogenaza.data.datasources.IVaccineSource;
 import org.dehydrogenaza.data.utils.DisplayState;
 
 import java.util.List;
