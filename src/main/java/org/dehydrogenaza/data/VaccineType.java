@@ -28,8 +28,8 @@ public class VaccineType {
     private final int id;
 
     /**
-     * Recommended dates of administering individual doses, represented as <emphasis>offsets in days</emphasis> from
-     * the start point (which is currently equal to the date of the first vaccination).
+     * Recommended dates of administering individual doses, represented as <emphasis>offsets in days</emphasis> from the
+     * start point (which is currently equal to the date of the first vaccination).
      * <p>An offset of "0" means that the given dose should be administered right at the start point.</p>
      */
     private int[] dateOffsets;
@@ -38,7 +38,8 @@ public class VaccineType {
 
     private final List<RecommendationTableBox> displayBoxes;
 
-    private final Map<VaccineType, Consumer<VaccineType>> vaccineRelationships;
+    //private final Map<VaccineType[], Consumer<VaccineType[]>> vaccineSelectionHandlers;
+    private final List<Runnable> vaccineSelectionHandlers;
 
     /**
      * Is this vaccination selected by the user. <strong>This value is bound bidirectionally with an HTML element
@@ -49,8 +50,8 @@ public class VaccineType {
 
     /**
      * Constructs a VaccineType based on Builder data.
-     * @param   builder
-     *          the internal Builder instance that takes care of this object's initialization.
+     *
+     * @param builder the internal Builder instance that takes care of this object's initialization.
      */
     private VaccineType(Builder builder) {
         this.name = builder.name;
@@ -59,7 +60,7 @@ public class VaccineType {
         this.dateOffsets = builder.dateOffsets;
         this.displayBoxes = builder.displayBoxes;
         this.variantNames = builder.variantNames;
-        this.vaccineRelationships = builder.vaccineRelationships;
+        this.vaccineSelectionHandlers = builder.vaccineSelectionHandlers;
         this.selected = builder.selected;
     }
 
@@ -71,7 +72,8 @@ public class VaccineType {
         private int[] dateOffsets;
         private String[] variantNames;
         private List<RecommendationTableBox> displayBoxes;
-        private Map<VaccineType, Consumer<VaccineType>> vaccineRelationships;
+        //        private Map<VaccineType[], Consumer<VaccineType[]>> vaccineSelectionHandlers;
+        private List<Runnable> vaccineSelectionHandlers;
         private boolean selected;
 
         public Builder withDisease(String diseaseName) {
@@ -100,14 +102,17 @@ public class VaccineType {
             this.id = currentID++;
             if (this.dateOffsets == null) this.dateOffsets = new int[]{0};
             if (this.displayBoxes == null) this.displayBoxes = new ArrayList<>();
-            this.vaccineRelationships = new HashMap<>();
+            this.vaccineSelectionHandlers = new ArrayList<>();
             this.selected = selected;
             return new VaccineType(this);
         }
     }
 
-    public void addRelationship(VaccineType vax, Consumer<VaccineType> action) {
-        vaccineRelationships.put(vax, action);
+    //    public void addSelectionHandler(Consumer<VaccineType[]> action, VaccineType... vax) {
+//        vaccineSelectionHandlers.put(vax, action);
+//    }
+    public void addSelectionHandler(Runnable action) {
+        vaccineSelectionHandlers.add(action);
     }
 
     public String getName() {
@@ -141,7 +146,7 @@ public class VaccineType {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
-        applyRelationships();
+        applySelectionHandlers();
     }
 
     public List<RecommendationTableBox> getBoxes() {
@@ -152,7 +157,10 @@ public class VaccineType {
         return v1.id == v2.id;
     }
 
-    private void applyRelationships() {
-        vaccineRelationships.forEach((vax, action) -> action.accept(vax));
+    //    private void applySelectionHandlers() {
+//        vaccineSelectionHandlers.forEach((vaxArray, action) -> action.accept(vaxArray));
+//    }
+    private void applySelectionHandlers() {
+        vaccineSelectionHandlers.forEach(Runnable::run);
     }
 }

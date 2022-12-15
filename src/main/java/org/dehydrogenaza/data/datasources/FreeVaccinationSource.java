@@ -13,6 +13,7 @@ public class FreeVaccinationSource implements IVaccineSource {
     private static final int VISIT_3TO4_MONTHS = 102;
     private static final int VISIT_4TO5_MONTHS = 132;
     private static final int VISIT_5TO6_MONTHS = 162;
+    private static final int VISIT_7TO8_MONTHS = 210;
     private static final int VISIT_13_MONTHS = 390;
     private static final int VISIT_16_MONTHS = 480;
     private static final int VISIT_6_YEARS = 2190;
@@ -21,7 +22,7 @@ public class FreeVaccinationSource implements IVaccineSource {
     public List<VaccineType> getVaccines() {
         List<VaccineType> vaccines = new ArrayList<>();
 
-        //MANDATORY
+        // MANDATORY
         VaccineType bcg = new VaccineType.Builder()
                 .withDisease("Gruźlica")
                 .withDateOffsets(WITHIN_24H)
@@ -29,7 +30,7 @@ public class FreeVaccinationSource implements IVaccineSource {
                 .create("BCG", true);
         VaccineType hbv = new VaccineType.Builder()
                 .withDisease("Wirusowe Zapalenie Wątroby typu B")
-                .withDateOffsets(WITHIN_24H, VISIT_6_WEEKS, 210)
+                .withDateOffsets(WITHIN_24H, VISIT_6_WEEKS, VISIT_7TO8_MONTHS)
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("HBV", true);
         VaccineType dtp = new VaccineType.Builder()
@@ -69,10 +70,11 @@ public class FreeVaccinationSource implements IVaccineSource {
                 .withDateOffsets(VISIT_13_MONTHS, VISIT_6_YEARS)
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("MMR", true);
-        //OPT-IN
-        // TODO: not recommended to do menB + menC/ACWY simultaneously, add ~2 weeks gap (add to other schedules)
+
+        // OPT-IN
+        // Not recommended to do menB + menC/ACWY simultaneously, adds a ~2 weeks gap to menB if both selected
         int[] menBOffsetsNormal = {VISIT_2TO3_MONTHS, VISIT_3TO4_MONTHS, VISIT_4TO5_MONTHS, VISIT_13_MONTHS};
-        int[] menBOffsetsDelayed = {VISIT_3TO4_MONTHS, VISIT_4TO5_MONTHS, VISIT_5TO6_MONTHS, VISIT_13_MONTHS};
+        int[] menBOffsetsDelayed = {VISIT_3TO4_MONTHS, VISIT_5TO6_MONTHS, VISIT_7TO8_MONTHS, VISIT_13_MONTHS};
         VaccineType menb = new VaccineType.Builder()
                 .withDisease("Meningokoki grupy B")
                 .withDateOffsets(menBOffsetsNormal)
@@ -83,15 +85,29 @@ public class FreeVaccinationSource implements IVaccineSource {
                 .withDateOffsets(VISIT_2TO3_MONTHS, VISIT_4TO5_MONTHS, VISIT_13_MONTHS)
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("MenC", false);
-        menc.addRelationship(menb, vaxMenB -> {
-            if (menc.isSelected()) vaxMenB.setDateOffsets(menBOffsetsDelayed);
-            else vaxMenB.setDateOffsets(menBOffsetsNormal);
-        });
         VaccineType menacwy = new VaccineType.Builder()
                 .withDisease("Meningokoki grup A, C, W, Y")
                 .withDateOffsets(VISIT_2TO3_MONTHS, VISIT_4TO5_MONTHS, VISIT_13_MONTHS)
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("MenACWY", false);
+        // INTERDEPENDENT VACCINES
+        // If menC is selected, deselect menACWY
+        menc.addSelectionHandler(() -> {
+            if (menc.isSelected()) menacwy.setSelected(false);
+        });
+
+        // If menC is selected, deselect menACWY
+        menacwy.addSelectionHandler(() -> {
+            if (menacwy.isSelected()) menc.setSelected(false);
+        });
+
+        // If either menC or menACWY is selected, use the delayed schedule for menB
+        Runnable chooseMenBSchedule = () -> {
+            if (menc.isSelected() || menacwy.isSelected()) menb.setDateOffsets(menBOffsetsDelayed);
+            else menb.setDateOffsets(menBOffsetsNormal);
+        };
+        menc.addSelectionHandler(chooseMenBSchedule);
+        menacwy.addSelectionHandler(chooseMenBSchedule);
 
         vaccines.add(bcg);
         vaccines.add(hbv);
