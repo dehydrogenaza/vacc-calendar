@@ -106,6 +106,7 @@ public class Client extends ApplicationTemplate {
         testLogger = "submitted";
 
         if (displayState == DisplayState.CALENDAR) {
+            getVaccines().forEach(vax -> vax.applyFormDataHandlers(form));
             calendar = new VaccinationCalendar(form);
         }
     }

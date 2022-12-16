@@ -3,9 +3,7 @@ package org.dehydrogenaza.data;
 import org.dehydrogenaza.data.utils.RecommendationTableBox;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -38,8 +36,8 @@ public class VaccineType {
 
     private final List<RecommendationTableBox> displayBoxes;
 
-    //private final Map<VaccineType[], Consumer<VaccineType[]>> vaccineSelectionHandlers;
     private final List<Runnable> vaccineSelectionHandlers;
+    private final List<Consumer<Form>> formDataHandlers;
 
     /**
      * Is this vaccination selected by the user. <strong>This value is bound bidirectionally with an HTML element
@@ -61,6 +59,7 @@ public class VaccineType {
         this.displayBoxes = builder.displayBoxes;
         this.variantNames = builder.variantNames;
         this.vaccineSelectionHandlers = builder.vaccineSelectionHandlers;
+        this.formDataHandlers = builder.formDataHandlers;
         this.selected = builder.selected;
     }
 
@@ -72,8 +71,8 @@ public class VaccineType {
         private int[] dateOffsets;
         private String[] variantNames;
         private List<RecommendationTableBox> displayBoxes;
-        //        private Map<VaccineType[], Consumer<VaccineType[]>> vaccineSelectionHandlers;
         private List<Runnable> vaccineSelectionHandlers;
+        private List<Consumer<Form>> formDataHandlers;
         private boolean selected;
 
         public Builder withDisease(String diseaseName) {
@@ -103,16 +102,18 @@ public class VaccineType {
             if (this.dateOffsets == null) this.dateOffsets = new int[]{0};
             if (this.displayBoxes == null) this.displayBoxes = new ArrayList<>();
             this.vaccineSelectionHandlers = new ArrayList<>();
+            this.formDataHandlers = new ArrayList<>();
             this.selected = selected;
             return new VaccineType(this);
         }
     }
 
-    //    public void addSelectionHandler(Consumer<VaccineType[]> action, VaccineType... vax) {
-//        vaccineSelectionHandlers.put(vax, action);
-//    }
     public void addSelectionHandler(Runnable action) {
         vaccineSelectionHandlers.add(action);
+    }
+
+    public void addFormDataHandler(Consumer<Form> handler) {
+        formDataHandlers.add(handler);
     }
 
     public String getName() {
@@ -149,6 +150,10 @@ public class VaccineType {
         applySelectionHandlers();
     }
 
+    public void applyFormDataHandlers(Form form) {
+        formDataHandlers.forEach(h -> h.accept(form));
+    }
+
     public List<RecommendationTableBox> getBoxes() {
         return displayBoxes;
     }
@@ -157,9 +162,6 @@ public class VaccineType {
         return v1.id == v2.id;
     }
 
-    //    private void applySelectionHandlers() {
-//        vaccineSelectionHandlers.forEach((vaxArray, action) -> action.accept(vaxArray));
-//    }
     private void applySelectionHandlers() {
         vaccineSelectionHandlers.forEach(Runnable::run);
     }

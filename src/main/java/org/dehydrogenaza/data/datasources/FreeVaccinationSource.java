@@ -2,6 +2,7 @@ package org.dehydrogenaza.data.datasources;
 
 import org.dehydrogenaza.data.VaccineType;
 import org.dehydrogenaza.data.utils.RecommendationTableBox;
+import org.dehydrogenaza.data.utils.TinyDate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ public class FreeVaccinationSource implements IVaccineSource {
     private static final int VISIT_13_MONTHS = 390;
     private static final int VISIT_16_MONTHS = 480;
     private static final int VISIT_6_YEARS = 2190;
+    private static final int VISIT_10_YEARS = 3650;
 
     @Override
     public List<VaccineType> getVaccines() {
@@ -67,12 +69,12 @@ public class FreeVaccinationSource implements IVaccineSource {
         // TODO: 2 doses, 390/2190 for children born >= 2013(?), 390/3650 for children born < 2013
         VaccineType mmr = new VaccineType.Builder()
                 .withDisease("Odra, świnka, różyczka")
-                .withDateOffsets(VISIT_13_MONTHS, VISIT_6_YEARS)
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("MMR", true);
 
         // OPT-IN
-        // Not recommended to do menB + menC/ACWY simultaneously, adds a ~2 weeks gap to menB if both selected
+        // Not recommended to do menB + menC/ACWY simultaneously,
+        // interdependency delays menB if both selected
         int[] menBOffsetsNormal = {VISIT_2TO3_MONTHS, VISIT_3TO4_MONTHS, VISIT_4TO5_MONTHS, VISIT_13_MONTHS};
         int[] menBOffsetsDelayed = {VISIT_3TO4_MONTHS, VISIT_5TO6_MONTHS, VISIT_7TO8_MONTHS, VISIT_13_MONTHS};
         VaccineType menb = new VaccineType.Builder()
@@ -90,6 +92,7 @@ public class FreeVaccinationSource implements IVaccineSource {
                 .withDateOffsets(VISIT_2TO3_MONTHS, VISIT_4TO5_MONTHS, VISIT_13_MONTHS)
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("MenACWY", false);
+
         // INTERDEPENDENT VACCINES
         // If menC is selected, deselect menACWY
         menc.addSelectionHandler(() -> {
@@ -108,6 +111,15 @@ public class FreeVaccinationSource implements IVaccineSource {
         };
         menc.addSelectionHandler(chooseMenBSchedule);
         menacwy.addSelectionHandler(chooseMenBSchedule);
+
+        //VACCINES DEPENDENT ON INPUT DATA, for example child's date of birth
+        mmr.addFormDataHandler(form -> {
+            if (TinyDate.of(form.getDateOfBirth()).after("2013-01-01")) {
+                mmr.setDateOffsets(VISIT_13_MONTHS, VISIT_6_YEARS);
+            } else {
+                mmr.setDateOffsets(VISIT_13_MONTHS, VISIT_10_YEARS);
+            }
+        });
 
         vaccines.add(bcg);
         vaccines.add(hbv);

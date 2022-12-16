@@ -154,6 +154,14 @@ public class TinyDate {
         return new TinyDate(y, m, d);
     }
 
+    public boolean after(TinyDate otherDate) {
+        return this.asNumber() > otherDate.asNumber();
+    }
+
+    public boolean after(String otherDate) {
+        return after(new TinyDate(otherDate));
+    }
+
 
     /**
      * Returns this date as a single number. Useful for sorting. The first 4 digits stand for the year, the next 2
