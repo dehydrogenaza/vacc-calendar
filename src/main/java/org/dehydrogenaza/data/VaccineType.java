@@ -42,6 +42,9 @@ public class VaccineType {
      */
     private boolean selected;
 
+    // TODO: Should probably include the recommended RANGE of dates: minimum/maximum??/optimal
+
+    // TODO: Should include a description/tooltip for the end user
 
     /**
      * Constructs a VaccineType based on Builder data.

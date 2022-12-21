@@ -2,6 +2,8 @@ package org.dehydrogenaza.data.utils;
 
 import org.dehydrogenaza.data.Form;
 
+// TODO: Rework so that it doesn't rely on init() and just takes the Form reference as a parameter for validateBounds().
+
 public class InputValidator {
     private static Form form;
 

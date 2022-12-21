@@ -7,24 +7,50 @@ import org.dehydrogenaza.data.utils.TinyDate;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: Break this up into methods, extract common parts of different vaccination plans
+
+// TODO: Add missing opt-in vaccines
+
+/**
+ * Supplies data (such as schedules, interdependencies between vaccines) for the "default", free mandatory vaccination
+ * plan, financed by the Polish government, with optional "recommended" vaccinations. This plan uses
+ * single-ingredient vaccines.
+ * <p>
+ * Note, that this data is intentionally hard-coded in a class instead of being kept in database. This approach
+ * allows us to generate fully static JS that executes 100% in the user's browser. This is easier both from the
+ * programming and server-management perspectives, and the downside is minimal, because this data is not dynamic (in
+ * fact it's just a bunch of constants that are expected to have some slight updates AT MOST once per year).
+ * </p><p>
+ * Even though we're storing data in the JS script itself (instead of loading it asynchronously), I've tested that this
+ * actually makes the script smaller, because we don't have to include any database-specific code.</p>
+ */
 public class FreeVaccinationSource implements IVaccineSource {
+    //Offsets in days (starting from 0 = date of birth) for "default" recommended visits.
     private static final int WITHIN_24H = 0;
     private static final int VISIT_6_WEEKS = 42;
     private static final int VISIT_2TO3_MONTHS = 72;
     private static final int VISIT_3TO4_MONTHS = 102;
     private static final int VISIT_4TO5_MONTHS = 132;
     private static final int VISIT_5TO6_MONTHS = 162;
-    private static final int VISIT_7TO8_MONTHS = 210;
+    private static final int VISIT_7TO8_MONTHS = 222;
     private static final int VISIT_13_MONTHS = 390;
     private static final int VISIT_16_MONTHS = 480;
     private static final int VISIT_6_YEARS = 2190;
     private static final int VISIT_10_YEARS = 3650;
 
+
+    // TODO: Think on how to apply the Singleton pattern here.
+    /**
+     * Supplies data for this vaccination plan, which uses single-ingredient vaccines.
+     * @return The list of {@link VaccineType}s in this plan with their default settings. Includes vaccines that are
+     * optional and not selected by default.
+     */
     @Override
     public List<VaccineType> getVaccines() {
         List<VaccineType> vaccines = new ArrayList<>();
 
-        // MANDATORY
+        // MANDATORY VACCINES
+
         VaccineType bcg = new VaccineType.Builder()
                 .withDisease("Gruźlica")
                 .withDateOffsets(WITHIN_24H)
@@ -66,13 +92,14 @@ public class FreeVaccinationSource implements IVaccineSource {
                 .withVariantNames("RV", "RV", "RV3")
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("RV", true);
-        // TODO: 2 doses, 390/2190 for children born >= 2013(?), 390/3650 for children born < 2013
+        // Recommended schedules depend on date of birth
         VaccineType mmr = new VaccineType.Builder()
                 .withDisease("Odra, świnka, różyczka")
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("MMR", true);
 
-        // OPT-IN
+        // OPT-IN VACCINES
+
         // Not recommended to do menB + menC/ACWY simultaneously,
         // interdependency delays menB if both selected
         int[] menBOffsetsNormal = {VISIT_2TO3_MONTHS, VISIT_3TO4_MONTHS, VISIT_4TO5_MONTHS, VISIT_13_MONTHS};
@@ -93,13 +120,14 @@ public class FreeVaccinationSource implements IVaccineSource {
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("MenACWY", false);
 
-        // INTERDEPENDENT VACCINES
+        // SETUP INTERDEPENDENCIES BETWEEN VACCINES
+
         // If menC is selected, deselect menACWY
         menc.addSelectionHandler(() -> {
             if (menc.isSelected()) menacwy.setSelected(false);
         });
 
-        // If menC is selected, deselect menACWY
+        // If menACWY is selected, deselect menC
         menacwy.addSelectionHandler(() -> {
             if (menacwy.isSelected()) menc.setSelected(false);
         });
@@ -112,7 +140,9 @@ public class FreeVaccinationSource implements IVaccineSource {
         menc.addSelectionHandler(chooseMenBSchedule);
         menacwy.addSelectionHandler(chooseMenBSchedule);
 
-        //VACCINES DEPENDENT ON INPUT DATA, for example child's date of birth
+        //SETUP VACCINES DEPENDENT ON INPUT DATA, for example child's date of birth
+
+        // Ministry of Health changed recommendations for the second dose; applies to children born >= 2013
         mmr.addFormDataHandler(form -> {
             if (TinyDate.of(form.getDateOfBirth()).after("2013-01-01")) {
                 mmr.setDateOffsets(VISIT_13_MONTHS, VISIT_6_YEARS);
@@ -121,6 +151,7 @@ public class FreeVaccinationSource implements IVaccineSource {
             }
         });
 
+        //Populate the list with ALL VaccineTypes (including ones that are optional/not selected)
         vaccines.add(bcg);
         vaccines.add(hbv);
         vaccines.add(dtp);
@@ -136,7 +167,15 @@ public class FreeVaccinationSource implements IVaccineSource {
         return vaccines;
     }
 
-
+// TODO: Figure out how Section 4 is going to work and rework this as needed.
+    /**
+     * Total placeholder, we don't even know how Section 4 is going to work yet.
+     *
+     * <p>Generates and returns data used in Section 4 to display a table of recommended date ranges for
+     * a specific vaccine.</p>
+     * @return  A list of {@link RecommendationTableBox}es representing this vaccine visually. Each box indicates
+     * either an empty or filled range of columns in the schedule.
+     */
     private List<RecommendationTableBox> getDisplayBoxes() {
         List<RecommendationTableBox> boxes = new ArrayList<>();
 

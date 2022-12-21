@@ -44,7 +44,6 @@ public class TinyDate {
          */
         private final int daysInMonth;
 
-
         /**
          * Gets the length of this month, in days, accounting for <emphasis>leap years</emphasis>.
          * @param   isLeapYear
@@ -58,7 +57,6 @@ public class TinyDate {
             }
             return daysInMonth;
         }
-
 
         /**
          * Calculates the number of days from a given day to the end of this month ("0" if it's the last day of the
@@ -76,7 +74,6 @@ public class TinyDate {
 
     }
 
-
     /**
      * Array of every Month enum field. Index 0 is reserved for "INVALID" months, index 1 is JANUARY etc. This array
      * is used to reference Months by their index, for example:
@@ -85,12 +82,12 @@ public class TinyDate {
      */
     private final static Month[] monthsByValue = Month.values();
 
-
     /**
      * Constructs a TinyDate from a YYYY-MM-DD <code>String</code>.
      *
      * <p>This constructor assumes that input is properly formatted.</p>
-     * @param date
+     * @param   date
+     *          Properly formatted YYYY-MM-DD string.
      */
     public TinyDate(String date) {
         //YYYY-MM-DD
@@ -98,7 +95,6 @@ public class TinyDate {
         this.month = Integer.parseInt(date.substring(5, 7));
         this.day = Integer.parseInt(date.substring(8, 10));
     }
-
 
     /**
      * Constructs a TinyDate from individual year/month/day values.
@@ -115,10 +111,18 @@ public class TinyDate {
         this.day = day;
     }
 
+    /**
+     * Factory method that returns a TinyDate corresponding to the given String.
+     *
+     * <p>This method assumes that input is properly formatted.</p>
+     * @param   date
+     *          Properly formatted YYYY-MM-DD string.
+     * @return
+     *          A TinyDate object constructed from this string.
+     */
     public static TinyDate of(String date) {
         return new TinyDate(date);
     }
-
 
     /**
      * Returns a new TinyDate that represents a date that's some <code>offset</code> days after this date
@@ -154,14 +158,27 @@ public class TinyDate {
         return new TinyDate(y, m, d);
     }
 
+    /**
+     * Checks if <b>this</b> TinyDate comes strictly after <b>otherDate</b>.
+     * @param   otherDate
+     *          The date to compare against.
+     * @return
+     *          <code>true</code> if this date is strictly later than otherDate, <code>false</code> otherwise.
+     */
     public boolean after(TinyDate otherDate) {
         return this.asNumber() > otherDate.asNumber();
     }
 
+    /**
+     * Checks if <b>this</b> TinyDate comes strictly after <b>otherDate</b>, represented as a valid YYYY-MM-DD string.
+     * @param   otherDate
+     *          The date to compare against. Must be a valid YYYY-MM-DD string.
+     * @return
+     *          <code>true</code> if this date is strictly later than otherDate, <code>false</code> otherwise.
+     */
     public boolean after(String otherDate) {
         return after(new TinyDate(otherDate));
     }
-
 
     /**
      * Returns this date as a single number. Useful for sorting. The first 4 digits stand for the year, the next 2
@@ -172,7 +189,6 @@ public class TinyDate {
     public int asNumber() {
         return year * 10000 + month * 100 + day;
     }
-
 
     /**
      * Returns this date as a YYYY-MM-DD String. The result will be properly formatted, with the month and day always
@@ -186,7 +202,6 @@ public class TinyDate {
         //this wouldn't work for Mieszko I
         return year + "-" + fixLength(month) + "-" + fixLength(day);
     }
-
 
     /**
      * Helper method to determine if the given year is a leap (366 day) year.
@@ -202,7 +217,6 @@ public class TinyDate {
         //for example: 2000 is a leap year, 1900 is not
         return (year % 4 == 0) && ((year % 400 == 0) || (year % 100 != 0));
     }
-
 
     /**
      * Helper method to add a leading "0" to a single-digit day/month, for example turning January "1" to "01". Used
