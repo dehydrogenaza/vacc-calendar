@@ -7,7 +7,6 @@ import org.teavm.flavour.templates.BindTemplate;
 import org.teavm.flavour.templates.Templates;
 import org.teavm.flavour.widgets.ApplicationTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -41,10 +40,10 @@ public class Client extends ApplicationTemplate {
 
 
     //  TODO: Remove test utility
-    /**
-     * Just a test utility. Displays a "debug log" on the bottom of the page, for easy visual reference.
-     */
-    private static String testLogger = "testLog";
+//    /**
+//     * Just a test utility. Displays a "debug log" on the bottom of the page, for easy visual reference.
+//     */
+//    private static String testLogger = "testLog";
 
     /**
      * The current state of the app. Determines which actions can be taken and which elements of the page should be
@@ -82,14 +81,14 @@ public class Client extends ApplicationTemplate {
     }
 
     //  TODO: Remove test utility
-    public String getTestLogger() {
-        return testLogger;
-    }
+//    public String getTestLogger() {
+//        return testLogger;
+//    }
 
     //  TODO: Remove test utility
-    public void setTestLogger(String testLogger) {
-        Client.testLogger = testLogger;
-    }
+//    public void setTestLogger(String testLogger) {
+//        Client.testLogger = testLogger;
+//    }
 
     public DisplayState getDisplayState() {
         return displayState;
@@ -103,7 +102,7 @@ public class Client extends ApplicationTemplate {
      */
     public void submit() {
         displayState = form.submit();
-        testLogger = "submitted";
+//        testLogger = "submitted";
 
         if (displayState == DisplayState.CALENDAR) {
             getVaccines().forEach(vax -> vax.applyFormDataHandlers(form));
@@ -149,68 +148,6 @@ public class Client extends ApplicationTemplate {
 
     public void removeAllOfType(VaccineType type) {
         calendar.removeAllOfType(type);
-    }
-
-
-//    TODO: Create an actual implementation + remove test util
-
-    /**
-     * <strong>MOCK IMPLEMENTATION</strong>
-     * <p>Replaces a {@link ScheduleForDay} with a new one (which should be probably passed as parameter, but
-     * currently isn't). This <strong>mutates</strong> the contents of {@link #calendar}.</p>
-     *
-     * @param date The date to be replaced (representing a unique calendar date and every vaccination scheduled for that
-     *             date).
-     */
-    public void changeDate(ScheduleForDay date) {
-        calendar.changeDate(date);
-        testLogger = "Invoked from: " + date;
-    }
-
-
-//    TODO: Create an actual implementation (maybe) + remove test util
-
-    /**
-     * <strong>MOCK IMPLEMENTATION</strong>
-     * <p>Appends a new, FAKE {@link ScheduleForDay} directly to the list in {@link #calendar}. Useful for
-     * testing.</p>
-     * <p>If this functionality is actually desired in the release version (which is somewhat likely), it should
-     * probably be implemented in the {@link VaccinationCalendar}</p> class instead, and called from here.
-     */
-    public void addDate() {
-        List<VaccineType> mockTypes = new ArrayList<>(form.getVaccines().subList(6, 10));
-        List<Dose> mockDoses = new ArrayList<>();
-        for (VaccineType type : mockTypes) {
-            mockDoses.add(new Dose(type, new TinyDate("3000-06-05")));
-        }
-        calendar.get().add(new ScheduleForDay("3000-06-05", mockDoses));
-    }
-
-
-//    TODO: Create an actual implementation (maybe) + remove test util
-
-    /**
-     * <strong>MOCK IMPLEMENTATION</strong>
-     * <p>Adds a single FAKE {@link VaccineType} "dose" to the specified schedule (position in the {@link #calendar}.
-     * Useful for testing.</p>
-     * <p>If this functionality is actually desired in the release version (which is somewhat likely), it should
-     * probably be implemented in the {@link VaccinationCalendar}</p> class instead, and called from here.
-     *
-     * @param index position in the list of unique calendar dates, taken from the calling HTML component.
-     */
-    public void addVaccine(int index) {
-//        calendar.get().get(index).addDose(new Dose(
-//                new VaccineType("dodano", "choroba", 1000, new int[]{0}, new ArrayList<>(), true),
-//                new TinyDate(1905, 10, 10)));
-        VaccineType test = new VaccineType.Builder()
-                .withDisease("choroba")
-                .withDateOffsets(0)
-                .withDisplayBoxes(new ArrayList<>())
-                .create("dodano", true);
-        calendar.get().get(index).addDose(new Dose(
-                test,
-                new TinyDate(1905, 10, 10)));
-        testLogger = "" + calendar.get().get(index).getDoses();
     }
 
     public void setChosenScheme(String schemeID) {

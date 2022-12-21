@@ -64,28 +64,6 @@ public class VaccinationCalendar {
     }
 
 
-    // TODO: Remove test utility.
-    /**
-     * <strong>MOCK IMPLEMENTATION</strong>, changes the given date to a preset one. Just for testing.
-     * @param   oldDate
-     *          {@link ScheduleForDay} to be replaced.
-     */
-    public void changeDate(ScheduleForDay oldDate) {
-        //for testing
-        List<VaccineType> mockTypes = new ArrayList<>(form.getVaccines().subList(3, 6));
-        List<Dose> mockDoses = new ArrayList<>();
-        for (VaccineType type : mockTypes) {
-            mockDoses.add(new Dose(type, new TinyDate("1999-12-31")));
-        }
-        ScheduleForDay newDate = new ScheduleForDay("1999-12-31", mockDoses);
-
-        scheduledDates.replaceAll(date
-                -> date.getDateAsNumber() == oldDate.getDateAsNumber() ? newDate : date);
-        sortByDate();
-
-    }
-
-
     // TODO: BUGGED. Moving the entire date does not effect dates (maybe just tempDates?) of individual Doses.
     /**
      * Updates the calendar by either removing a given {@link ScheduleForDay} instance (if its calendar date was set

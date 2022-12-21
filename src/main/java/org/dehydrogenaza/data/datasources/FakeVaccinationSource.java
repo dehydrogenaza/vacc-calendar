@@ -6,6 +6,9 @@ import org.dehydrogenaza.data.utils.RecommendationTableBox;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Just some fake data for testing. Will be removed in the final version.
+ */
 public class FakeVaccinationSource implements IVaccineSource {
 
     @Override

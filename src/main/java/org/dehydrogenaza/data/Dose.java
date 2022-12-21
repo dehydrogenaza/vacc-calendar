@@ -13,10 +13,6 @@ public class Dose {
     private String tempDate;
 
     public Dose(VaccineType type, TinyDate date) {
-//        this.type = type;
-//        this.date = date;
-//
-//        this.tempDate = date.toString();
         this(type, date, type.getName());
     }
 

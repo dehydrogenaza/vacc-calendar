@@ -24,9 +24,6 @@ public class Form {
 
     private final List<VaccinationScheme> schemes;
 
-//    private String chosenScheme = "0";
-
-
     /**
      * Child's birthdate.
      * <br>This value is (through its getters and setters) bidirectionally bound to an HTML input field.
@@ -67,10 +64,10 @@ public class Form {
 
 
 //  TODO: Remove test utility
-    /**
-     * Just a quick "debug logger" for visual reference, will be removed in the release version.
-     */
-    private String formLog = "form";
+//    /**
+//     * Just a quick "debug logger" for visual reference, will be removed in the release version.
+//     */
+//    private String formLog = "form";
 
 
     /**
@@ -140,14 +137,14 @@ public class Form {
     }
 
     //  TODO: Remove test utility
-    public String getFormLog() {
-        return formLog;
-    }
+//    public String getFormLog() {
+//        return formLog;
+//    }
 
-//  TODO: Remove test utility
-    public void setFormLog(String formLog) {
-        this.formLog = formLog;
-    }
+    //  TODO: Remove test utility
+//    public void setFormLog(String formLog) {
+//        this.formLog = formLog;
+//    }
 
 
 //    TODO: check if any vaccines are selected at all

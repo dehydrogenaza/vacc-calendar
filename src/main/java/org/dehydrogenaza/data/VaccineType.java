@@ -31,11 +31,8 @@ public class VaccineType {
      * <p>An offset of "0" means that the given dose should be administered right at the start point.</p>
      */
     private int[] dateOffsets;
-
     private final String[] variantNames; //can be null
-
     private final List<RecommendationTableBox> displayBoxes;
-
     private final List<Runnable> vaccineSelectionHandlers;
     private final List<Consumer<Form>> formDataHandlers;
 
