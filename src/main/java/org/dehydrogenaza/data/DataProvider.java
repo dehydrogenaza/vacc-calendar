@@ -9,16 +9,29 @@ import java.util.List;
 /**
  * Mock implementation of the initial data provider. Creates and serves fake data, such as vaccine names, number of
  * vaccinations etc.
- * <p>Proper implementation will probably read the data from a JSON file. <strong>Nope, that costs a ton in terms of
+ * <p><s>Proper implementation will probably read the data from a JSON file.</s> <strong>Nope, that costs a ton in terms of
  * JS size!</strong>
  * </strong></p>
  */
 public class DataProvider {
+    /**
+     * Currently used Source of vaccination data.
+     */
     private IVaccineSource vaccinesSource;
+    /**
+     * All available vaccines in the currently selected vaccination plan. Includes defaults and optionals.
+     */
     private final List<VaccineType> vaccines;
+    /**
+     * A list of all {@link VaccinationScheme}s that can be selected by the user. The schemes only *visually*
+     * represent the vaccination plans and don't hold any vaccination data themselves (the data is provided by
+     * {@link IVaccineSource}s instead).
+     */
     private final List<VaccinationScheme> schemes;
 
     public DataProvider(IVaccineSource vaccinesSource) {
+        // TODO: Should probably copy the list of vaccines from the source!
+
         this.vaccinesSource = vaccinesSource;
         vaccines = vaccinesSource.getVaccines();
 
