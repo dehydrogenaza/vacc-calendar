@@ -173,6 +173,7 @@ public class Form {
 
 //    TODO: perform more robust checks, for example with malformed Strings etc.
 //    TODO: possibly check if dates are within reasonable ranges
+    // TODO: move some or all of this to the InputValidator
     /**
      * Checks if the current input dates ({@link #dateOfBirth} and {@link #dateOfFirstVaccination}) are properly
      * formatted AND if the first vaccination doesn't come earlier than the birthdate.

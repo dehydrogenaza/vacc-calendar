@@ -107,6 +107,7 @@ public class VaccinationCalendar {
     }
 
     // TODO: not sure if this should allow to remove a dose since that function has a separate UI button
+
     /**
      * Updates the calendar by either removing a given {@link Dose} instance (if its calendar date was set
      * to ""), or by rescheduling it to a new day (temporarily stored in its <code>tempDate</code> field). If
@@ -121,6 +122,7 @@ public class VaccinationCalendar {
      */
     public void updateDose(ScheduleForDay changedDate, Dose changedDose) {
         if (changedDose.isSetToNew()) {
+            // TODO: This may bug out if the Dose should have an alternate name
             Dose updatedDose = new Dose(changedDose.getType(), changedDose.getTempDate());
 
             //search the calendar to see if a Schedule already exists for this new date
