@@ -38,6 +38,14 @@ public class DataProvider {
         schemes = buildSchemesList();
     }
 
+
+    //TODO: Switch to an immutable list (unmodifiableList).
+    /**
+     * Helper function for creating a list of vaccination "plan" names and basic data. An example of a "plan" would
+     * be the government-funded free plan, or the plan which uses the paid 6-in-1 polyivalent DTP+IPV+Hib+WZW vaccine.
+     * @return
+     *          A list containing the supported {@link VaccinationScheme}s.
+     */
     private List<VaccinationScheme> buildSchemesList() {
         List<VaccinationScheme> schemesList = new ArrayList<>();
         schemesList.add(new VaccinationScheme("Darmowe dla plebsu", 0, true));
@@ -48,6 +56,12 @@ public class DataProvider {
         return schemesList;
     }
 
+    /**
+     * Gets the list of all supported {@link VaccinationScheme}s. <strong>The list is currently mutable.</strong> It's
+     * used for displaying the "vaccination plan" radio select group.
+     * @return
+     *          a list of all supported {@link VaccinationScheme}s.
+     */
     public List<VaccinationScheme> getSchemes() {
         return schemes;
     }
@@ -63,6 +77,14 @@ public class DataProvider {
         return vaccines;
     }
 
+
+    // TODO: Copy the list from the source. Make the original list immutable.
+    /**
+     * Updates the currently selected {@link VaccinationScheme}, which involves replacing the list of available
+     * {@link VaccineType}s.
+     * @param   newSource
+     *          the newly selected source of data, corresponding to the chosen scheme.
+     */
     public void changeChosenVaccinationScheme(IVaccineSource newSource) {
         vaccinesSource = newSource;
 
