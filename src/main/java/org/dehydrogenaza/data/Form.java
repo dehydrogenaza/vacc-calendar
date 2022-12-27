@@ -22,6 +22,10 @@ public class Form {
      */
     private final List<VaccineType> vaccines;
 
+    /**
+     * List of supported "schemes" ("plans", such as the government-funded free vaccination plan), taken from the
+     * {@link #dataProvider}.
+     */
     private final List<VaccinationScheme> schemes;
 
     /**
@@ -91,26 +95,52 @@ public class Form {
         return schemes;
     }
 
+    /**
+     * <strong>Bidirectionally bound to an HTML input element</strong> (in Section 1, the initial input form).
+     * @return
+     *          The child's date of birth, synchronized with the one in the HTML input form.
+     */
     public String getDateOfBirth() {
         return dateOfBirth;
     }
 
+    /**
+     * <strong>Bidirectionally bound to an HTML input element</strong> (in Section 1, the initial input form).
+     * <p>Updating this field also affects the {@link #dateOfFirstVaccination}, which is automatically set to the
+     * same value.</p>
+     * @param   dateOfBirth
+     *          the date of birth inputted by the user.
+     */
     public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
-
         dateOfBirthMissing = dateOfBirth.isEmpty();
 
         setDateOfFirstVaccination(dateOfBirth);
     }
 
+    /**
+     * <strong>Bidirectionally bound to an HTML input element</strong> (in Section 1, the initial input form).
+     * <p>This value might be set to an incorrect date (such as any date before the date of birth) and should not be
+     * accepted without validation.</p>
+     * @return
+     *          The child's chosen date of first vaccination, synchronized with the one in the HTML input form.
+     */
     public String getDateOfFirstVaccination() {
         return dateOfFirstVaccination;
     }
 
+    /**
+     * <strong>Bidirectionally bound to an HTML input element</strong> (in Section 1, the initial input form).
+     * <p>Simple validation will be performed by the {@link #validateDates()} method to see if this date falls
+     * (correctly) after the child's date of birth, but the value of this field won't be changed even if it's
+     * incorrect (instead, the {@link #dateOfFirstVaccinationTooEarly} flag will be set to <code>true</code>.</p>
+     * @param   dateOfFirstVaccination
+     *          the chosen date of first vaccination, inputted by the user.
+     */
     public void setDateOfFirstVaccination(String dateOfFirstVaccination) {
         this.dateOfFirstVaccination = dateOfFirstVaccination;
-
         dateOfFirstVaccinationMissing = dateOfBirth.isEmpty();
+
         if (!dateOfFirstVaccinationMissing) {
             validateDates();
         }
@@ -151,8 +181,8 @@ public class Form {
 //    TODO: possibly return a different State depending on what went wrong
 //    TODO: maybe also check if dates are within reasonable ranges
     /**
-     *      * Attempts to validate and submit the currently input data. If validation succeeds, the app moves on to the next
-     * phase, which is displaying the suggested vaccination dates.
+     * Attempts to validate and submit the currently input data. If validation succeeds, the app moves on to the next
+     * phase, that is: displaying the suggested vaccination dates.
      * @return
      *          {@link DisplayState#BAD_SUBMIT} if the data is incorrect, {@link DisplayState#CALENDAR} if the app
      *          should proceed.

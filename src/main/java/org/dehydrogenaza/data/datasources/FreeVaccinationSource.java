@@ -65,7 +65,7 @@ public class FreeVaccinationSource implements IVaccineSource {
                 .withDisease("Błonica, tężec, krztusiec")
                 .withDateOffsets(VISIT_6_WEEKS, VISIT_3TO4_MONTHS, VISIT_5TO6_MONTHS,
                         VISIT_16_MONTHS, VISIT_6_YEARS, 5110, 6935)
-                .withVariantNames("DTPw", "DTPw", "DTPw", "DTPw", "DTaP", "dTpa", "Td")
+                .withAltNames("DTPw", "DTPw", "DTPw", "DTPw", "DTaP", "dTpa", "Td")
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("DTP", true);
         VaccineType ipv = new VaccineType.Builder()
@@ -89,7 +89,7 @@ public class FreeVaccinationSource implements IVaccineSource {
         VaccineType rv = new VaccineType.Builder()
                 .withDisease("Rotawirusy")
                 .withDateOffsets(VISIT_6_WEEKS, VISIT_3TO4_MONTHS, VISIT_5TO6_MONTHS)
-                .withVariantNames("RV", "RV", "RV3")
+                .withAltNames("RV", "RV", "RV3")
                 .withDisplayBoxes(getDisplayBoxes())
                 .create("RV", true);
         // Recommended schedules depend on date of birth

@@ -32,14 +32,13 @@ public class Client extends ApplicationTemplate {
      */
     private final Form form = new Form(dataProvider);
 
-
     /**
      * Stores a mapping of unique calendar dates to vaccinations scheduled for that day.
      */
     private VaccinationCalendar calendar = new VaccinationCalendar();
 
 
-    //  TODO: Remove test utility
+    // TODO: Remove test utility
 //    /**
 //     * Just a test utility. Displays a "debug log" on the bottom of the page, for easy visual reference.
 //     */
@@ -110,46 +109,28 @@ public class Client extends ApplicationTemplate {
         }
     }
 
-    public String getCSVExportURI() {
-        return CSVWriter.getDataURI(calendar.get());
-    }
-
     public List<ScheduleForDay> getCalendar() {
         return calendar.get();
     }
 
-
     /**
-     * Submits the user's changes made to a single, scheduled {@link ScheduleForDay}.
-     *
-     * @param date The scheduled date that was changed.
+     * Creates and returns a URI encoding the current schedule as a CSV file. Used for downloading the calendar as
+     * file. <strong>Bound to an HTML download button.</strong>
+     * @return
+     *          the current calendar encoded as a URI.
      */
-    public void confirmCalendarChange(ScheduleForDay date) {
-        if (date.getDate().equals(date.getTempDate())) {
-            return;
-        }
-        if (date.isInBounds()) {
-            calendar.updateDate(date);
-        }
+    public String getCSVExportURI() {
+        return CSVWriter.getDataURI(calendar.get());
     }
 
-    public void confirmDoseChange(ScheduleForDay date, Dose dose) {
-        if (dose.getDate().toString().equals(dose.getTempDate())) {
-            return;
-        }
-        if (dose.isInBounds()) {
-            calendar.updateDose(date, dose);
-        }
-    }
-
-    public void removeDose(ScheduleForDay date, Dose dose) {
-        calendar.removeDose(date, dose);
-    }
-
-    public void removeAllOfType(VaccineType type) {
-        calendar.removeAllOfType(type);
-    }
-
+    // TODO: This is basically a factory method, consider moving it from the Client class.
+    /**
+     * Sets the current {@link IVaccineSource} to a new {@link VaccinationScheme} based on an input
+     * <code>String</code> directly taken from the HTML (in Section 1, the main input form). <strong>Bound to
+     * an HTML radio selector</strong>.
+     * @param   schemeID
+     *          the ID of the newly selected {@link VaccinationScheme}.
+     */
     public void setChosenScheme(String schemeID) {
         IVaccineSource newSchemeSource;
         switch (schemeID) {
@@ -164,5 +145,55 @@ public class Client extends ApplicationTemplate {
         }
 
         dataProvider.changeChosenVaccinationScheme(newSchemeSource);
+    }
+
+    /**
+     * Submits the user's changes made to a single, scheduled {@link ScheduleForDay}.
+     *
+     * @param date the scheduled date that was changed.
+     */
+    public void confirmCalendarChange(ScheduleForDay date) {
+        if (date.getDate().equals(date.getTempDate())) {
+            return;
+        }
+        if (date.isInBounds()) {
+            calendar.updateDate(date);
+        }
+    }
+
+    /**
+     * Submits the user's changes made to a single {@link Dose}.
+     * @param   scheduledDate
+     *          the {@link ScheduleForDay} that the {@link Dose} is linked to.
+     * @param   dose
+     *          the {@link Dose} that is to be rescheduled.
+     */
+    public void confirmDoseChange(ScheduleForDay scheduledDate, Dose dose) {
+        if (dose.getDate().toString().equals(dose.getTempDate())) {
+            return;
+        }
+        if (dose.isInBounds()) {
+            calendar.updateDose(scheduledDate, dose);
+        }
+    }
+
+    /**
+     * Removes a single {@link Dose} from the {@link #calendar}.
+     * @param   scheduledDate
+     *          the {@link ScheduleForDay} that the {@link Dose} is linked to.
+     * @param   dose
+     *          the {@link Dose} to be removed.
+     */
+    public void removeDose(ScheduleForDay scheduledDate, Dose dose) {
+        calendar.removeDose(scheduledDate, dose);
+    }
+
+    /**
+     * Removes all {@link Dose}s of a given {@link VaccineType} from the {@link #calendar}.
+     * @param   type
+     *          a {@link VaccineType} that is to be removed.
+     */
+    public void removeAllOfType(VaccineType type) {
+        calendar.removeAllOfType(type);
     }
 }

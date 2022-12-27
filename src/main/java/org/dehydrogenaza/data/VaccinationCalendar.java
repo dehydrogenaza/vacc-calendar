@@ -170,6 +170,7 @@ public class VaccinationCalendar {
      */
     public void removeAllOfType(VaccineType type) {
         for (ScheduleForDay date : scheduledDates) {
+            // TODO: This is probably not necessary in this version, replace isSame with an EQUALS (or even ==) ?
             date.getDoses().removeIf(dose -> VaccineType.isSame(dose.getType(), type));
         }
         scheduledDates.removeIf(date -> date.getDoses().isEmpty());
@@ -208,7 +209,7 @@ public class VaccinationCalendar {
             int[] dateOffsets = type.getDateOffsets();
             for (int i = 0; i < dateOffsets.length; i++) {
                 int offsetInDays = dateOffsets[i];
-                String variantName = type.getVariant(i);
+                String variantName = type.getAltName(i);
                 //when the dose should be administered
                 String dateOfVaccination = startDate.addDays(offsetInDays).toString();
 
