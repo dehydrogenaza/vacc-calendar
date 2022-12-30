@@ -25,8 +25,6 @@ public class InputValidator {
         InputValidator.form = form;
     }
 
-    // TODO: Let this class work with TinyDate too.
-
     /**
      * Checks if the inputted date (provided as a YYYY-MM-DD <code>String</code>) falls within supported range.
      * <p>The range starts on <i>dateOfBirth</i> (taken from the {@link #form}), but no earlier than 1900-01-01; and
